@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>hello-world</title>
+    <title>test</title>
     <url>/2022/06/09/hello-world-1/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h2 id="sss"><a href="#sss" class="headerlink" title="sss"></a>sss</h2><blockquote>
+<p>ss<br>sss</p>
+<blockquote>
+<p>ss</p>
+</blockquote>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">r = requests.get(<span class="string">&quot;s&quot;</span>)</span><br><span class="line">r.content()</span><br></pre></td></tr></table></figure>
+<pre><code>#include  &lt;stdio.h&gt;
+int main(void)`
+&#123;
+    printf(&quot;Hello world\n&quot;);
+&#125;
+</code></pre>]]></content>
       <categories>
         <category>爬虫</category>
         <category>ss</category>
@@ -25,6 +37,18 @@
 <p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>test</title>
+    <url>/2022/06/09/test/</url>
+    <content><![CDATA[<p><img src="abc.png" alt="s"></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>猿人学18题</title>
+    <url>/2022/06/09/%E7%8C%BF%E4%BA%BA%E5%AD%A618%E9%A2%98/</url>
+    <content><![CDATA[<p><img src="/猿人学18题/abc.png" alt="s"></p>
 ]]></content>
   </entry>
 </search>
