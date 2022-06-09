@@ -40,9 +40,9 @@
     <category term="js逆向" scheme="http://example.com/categories/%E7%88%AC%E8%99%AB/js%E9%80%86%E5%90%91/"/>
     
     
-    <category term="爬虫" scheme="http://example.com/tags/%E7%88%AC%E8%99%AB/"/>
-    
     <category term="js逆向" scheme="http://example.com/tags/js%E9%80%86%E5%90%91/"/>
+    
+    <category term="爬虫" scheme="http://example.com/tags/%E7%88%AC%E8%99%AB/"/>
     
     <category term="python" scheme="http://example.com/tags/python/"/>
     
