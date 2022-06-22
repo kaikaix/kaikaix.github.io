@@ -134,4 +134,23 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
         <tag>爬虫</tag>
       </tags>
   </entry>
+  <entry>
+    <title>implement of cross entropy loss</title>
+    <url>/2022/06/22/implement-of-cross-entropy-loss/</url>
+    <content><![CDATA[<p>首先来看看交叉熵函数公式是怎么样的</p>
+<script type="math/tex; mode=display">l(\mathbf{y}, \hat{\mathbf{y}}) = - \sum_{j=1}^q y_j \log \hat{y}_j.</script><span id="more"></span>
+<p>此方法多用于分类问题，也就是每个种类概率为多少，最后得出一个向量vector<br>可以看看这篇文章的解释<br><a href="https://d2l.ai/chapter_linear-networks/softmax-regression.html">https://d2l.ai/chapter_linear-networks/softmax-regression.html</a></p>
+<blockquote>
+<p>The component corresponding to particular instance’s category is set to 1 and all other components are set to 0. In our case, a label $y$ would be a three-dimensional vector, with $(1, 0, 0)$ corresponding to “cat”, $(0, 1, 0)$ to “chicken”, $(0, 0, 1)$ and to “dog”</p>
+</blockquote>
+<p>大致意思是用向量来表示每个物种<br>如果我们测出了一个图片的分类概率是 $\hat{y} = (0.2,0.3,0.5)$，而实际上这个物种是一个狗，也就是 $y= (0,0,1)$，那么预测值与实际值的损失是多少呢？<br>那么就要用到上面的cross-entropy，交叉熵函数了<br>把上面的向量带入公式，可以得到 <script type="math/tex">l(\mathbf{y}, \hat{\mathbf{y}}) = -(0\cdot \log 0.2+0\cdot \log 0.3+1\cdot \log 0.5)</script><br>那么观察可以发现，除了真实项，其它都为0，那么设计代码的时候可以直接预测值里面那个与实际项对应的数求对数<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cross_entropy</span>(<span class="params">y_hat, y</span>):</span><br><span class="line">    <span class="keyword">return</span> - np.log(y_hat[<span class="built_in">range</span>(<span class="built_in">len</span>(y_hat)), y])</span><br></pre></td></tr></table></figure><br>这里的y并不是上面的$(0,0,1)$这种类型，而是$(1,2,0,1)$这样的<br>意思就是第二个是实际的，第三个是实际的，第一个实际的，第二个是实际，用一段代码解释就是<br><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">y_hat = np.array([[<span class="number">0.1</span>, <span class="number">0.3</span>, <span class="number">0.6</span>], [<span class="number">0.3</span>, <span class="number">0.2</span>, <span class="number">0.5</span>],[<span class="number">0.2</span>,<span class="number">0.7</span>,<span class="number">0.1</span>],[<span class="number">0.8</span>,<span class="number">0.1</span>,<span class="number">0.1</span>]])</span><br><span class="line">y=(<span class="number">1</span>,<span class="number">2</span>,<span class="number">0</span>,<span class="number">1</span>)</span><br><span class="line">cross_entropy(y_hat, y)</span><br></pre></td></tr></table></figure><br>显示结果就是<br><code>array([1.2039728, 0.6931472, 1.609438 , 2.3025851])</code><br>可以用计算器算一下-log(0.3),-log(0.5),就是上面的结果</p>
+]]></content>
+      <categories>
+        <category>数学</category>
+      </categories>
+      <tags>
+        <tag>机器学习</tag>
+        <tag>数学</tag>
+      </tags>
+  </entry>
 </search>
