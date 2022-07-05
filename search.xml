@@ -170,4 +170,9 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
         <tag>php</tag>
       </tags>
   </entry>
+  <entry>
+    <title>test</title>
+    <url>/2022/07/06/test/</url>
+    <content><![CDATA[<iframe src="//player.bilibili.com/player.html?aid=512841425&bvid=BV133411w7oM&cid=756829027&page=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"> </iframe>]]></content>
+  </entry>
 </search>
