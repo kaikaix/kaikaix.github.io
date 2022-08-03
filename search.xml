@@ -165,7 +165,6 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
 ]]></content>
       <categories>
         <category>js逆向</category>
-        <category>爬虫</category>
       </categories>
       <tags>
         <tag>python</tag>
