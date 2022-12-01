@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="fastjson基本用法文章的fastjson版本1234567&lt;dependencies&gt;    &lt;dependency&gt;        &lt;groupId&gt;com.alibaba&lt;&#x2F;groupId&gt;        &lt;artifactId&gt;fastjson&lt;&#x2F;artifactId&gt;        &lt;version&gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="fastjson初学">
+<meta property="og:url" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/index.html">
+<meta property="og:site_name" content="kaikaix">
+<meta property="og:description" content="fastjson基本用法文章的fastjson版本1234567&lt;dependencies&gt;    &lt;dependency&gt;        &lt;groupId&gt;com.alibaba&lt;&#x2F;groupId&gt;        &lt;artifactId&gt;fastjson&lt;&#x2F;artifactId&gt;        &lt;version&gt;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/1.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/2.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/3.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/4.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/5.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/6.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/7.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/8.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/9.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/10.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/11.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/12.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/13.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/14.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/15.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/16.jpg">
+<meta property="og:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/17.jpg">
+<meta property="article:published_time" content="2022-12-01T14:51:27.000Z">
+<meta property="article:modified_time" content="2022-12-01T21:11:57.984Z">
+<meta property="article:author" content="kaikaix">
+<meta property="article:tag" content="代码审计">
+<meta property="article:tag" content="java">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/1.jpg">
+
+<link rel="canonical" href="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>fastjson初学 | kaikaix</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="kaikaix" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kaikaix</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">小白</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/kaikaix" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="kaikaix">
+      <meta itemprop="description" content="小白">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kaikaix">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          fastjson初学
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2022-12-01 22:51:27" itemprop="dateCreated datePublished" datetime="2022-12-01T22:51:27+08:00">2022-12-01</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-12-02 05:11:57" itemprop="dateModified" datetime="2022-12-02T05:11:57+08:00">2022-12-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="fastjson基本用法"><a href="#fastjson基本用法" class="headerlink" title="fastjson基本用法"></a>fastjson基本用法</h2><p>文章的fastjson版本<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.alibaba<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>fastjson<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.23<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure><br>fastjson主要是用来序列化与反序列化JavaBean<br>下面是一个简单的JavaBean对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Student</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">int</span> age;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Student</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;Student无参构造器&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">Student</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">        System.out.println(<span class="string">&quot;Student构造函数&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;getName&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getAge</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;getAge&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;setName&quot;</span>);</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAge</span><span class="params">(<span class="type">int</span> age)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;setAge&quot;</span>);</span><br><span class="line">        <span class="built_in">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h3><p>下面将用fastjson来序列化上面的对象，将他们转换为json<br>新建一个文件StudentSer.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.*;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.parser.Feature;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.serializer.SerializerFeature;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StudentSer</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">serJson</span> <span class="operator">=</span> JSON.toJSONString(<span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;kaikaix&quot;</span>,<span class="number">20</span>));</span><br><span class="line">        System.out.println(serJson);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/1.jpg" alt><br>打印了getAge和getName，说明在序列化的时候会对getXxxx进行调用<br>当然不止toJSONString，还有toJSONBytes，具体可以看JSON.class类中的成员方法</p>
+<h3 id="反序列化"><a href="#反序列化" class="headerlink" title="反序列化"></a>反序列化</h3><p>接下来就是反序列化了，这里的反序列化类似php，并不是读取字节文件，而是读取json格式的字符串<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.*;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.parser.Feature;</span><br><span class="line"><span class="keyword">import</span> com.alibaba.fastjson.serializer.SerializerFeature;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StudentSer</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">serJson</span> <span class="operator">=</span> JSON.toJSONString(<span class="keyword">new</span> <span class="title class_">Student</span>(<span class="string">&quot;kaikaix&quot;</span>,<span class="number">20</span>));</span><br><span class="line">        System.out.println(serJson);</span><br><span class="line">        System.out.printf(<span class="string">&quot;Parse had done =&gt; %s\n&quot;</span>,JSON.parse(serJson).getClass());</span><br><span class="line">        System.out.printf(<span class="string">&quot;parseObject has done =&gt; %s\n&quot;</span>,JSON.parseObject(serJson).getClass());</span><br><span class="line">        System.out.printf(<span class="string">&quot;parseObject(Student.class) has done =&gt; %s\n&quot;</span>,JSON.parseObject(serJson,Student.class).getClass());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/2.jpg" alt><br>在这里进行了三次反序列化<br>主要就是parse和parseObject<br>但是观察parseObject的源码，其实也是对parse的一次封装，核心还是调用了parse，主要区别就是对parse后返回的obj调用了一次toJSON<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> JSONObject <span class="title function_">parseObject</span><span class="params">(String text)</span> &#123;</span><br><span class="line">    <span class="type">Object</span> <span class="variable">obj</span> <span class="operator">=</span> parse(text);</span><br><span class="line">    <span class="keyword">return</span> obj <span class="keyword">instanceof</span> JSONObject ? (JSONObject)obj : (JSONObject)toJSON(obj);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>我们注意到，只有最后一次反序列化的时候调用了setXxx方法，因为最后一次传递了一个Student.class给他，fastjson才能知道这段String最后到底应该反序列化为哪个对象<br>而且反序列化的时候调用的构造函数是无参构造器，所以fastjson反序列化的JavaBean必须有无参构造器，否则就会报错</p>
+<blockquote>
+<p><strong>@type</strong><br>如果每次都需要传递具体是哪个类的，就会显得这个反序列化很笨重，所以开发者给定了一个@type的键，可以在json字符串里面指定具体要反序列化为哪个对象<br><code>serJson = &quot;&#123;\&quot;@type\&quot;:\&quot;Student\&quot;,\&quot;age\&quot;:12,\&quot;name\&quot;:\&quot;Sam\&quot;&#125;&quot;;</code><br>如果是将这样的json字符串进行反序列化，那么上面的三种反序列化方式也都可以正确反序列化<br>所以这个点也是后续漏洞的核心关键</p>
+</blockquote>
+<h2 id="反序列化源码分析"><a href="#反序列化源码分析" class="headerlink" title="反序列化源码分析"></a>反序列化源码分析</h2><p><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/3.jpg" alt></p>
+<h3 id="No1"><a href="#No1" class="headerlink" title="No1"></a>No1</h3><p>首先会进入这里，new了一个DefaultJSONParser对象<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/4.jpg" alt><br>跟进去会首先判断第一个字符是什么，如果是“{”，就会将token设置为12，如果是“[”，就会设置14，如果都不是就会进入nextToken，主要作用就是看下一个字符是什么，如果碰到了“{”就将token设置为12<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="string">&#x27;[&#x27;</span>:</span><br><span class="line">    <span class="built_in">this</span>.next();</span><br><span class="line">    <span class="built_in">this</span>.token = <span class="number">14</span>;</span><br><span class="line">    <span class="keyword">return</span>;</span><br></pre></td></tr></table></figure><br>当然还有其它情况，比如碰到空格之类的，就会继续跳到下一个字符，直到碰到像“{”这样的字符，有时绕waf可能就会用到这些特性<br>比如在json前面填充垃圾字符<br><code>serJson = &quot;        &#123;\&quot;@type\&quot;:\&quot;Student\&quot;,\&quot;age\&quot;:12,\&quot;name\&quot;:\&quot;Sam\&quot;&#125;&quot;;</code><br>剩下的读者可以自行分析</p>
+<blockquote>
+<p>小插曲<br>这里我将{}改成了[]，然后进行了反序列化<br><code>serJson = &quot;[\&quot;@type\&quot;:\&quot;Student\&quot;,\&quot;age\&quot;:12,\&quot;name\&quot;:\&quot;Sam\&quot;]&quot;;</code><br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/5.jpg" alt><br>但是报错了，继续fuzz，试了一下{开头，]结尾<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/6.jpg" alt><br>虽然最后报错了，但是前面确实可以反序列化，说不定这种就可以绕一下waf</p>
+</blockquote>
+<p><em>注意上面的操作都是在json字符串之前的，也就是在“{”前面的一些检查，接下来就进入{}里面了</em></p>
+<h3 id="No2"><a href="#No2" class="headerlink" title="No2"></a>No2</h3><p>走完DefaultJSONParser的初始化，就进入到parser.parse()<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/7.jpg" alt><br>因为之前是{，所以设置的token为12，所以就会进入这个case<br>由于字节的原因，我不能在这下断点，所以我直接将断点打到parseObject里面<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/8.jpg" alt><br>直接跳到这个循环处<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/9.jpg" alt><br>第一个函数根据英文意思skipWhitespace，可以大概猜出是跳过空白字符串<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">skipWhitespace</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">        <span class="keyword">while</span>(<span class="literal">true</span>) &#123;</span><br><span class="line">            <span class="keyword">if</span> (<span class="built_in">this</span>.ch &lt;= <span class="string">&#x27;/&#x27;</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">this</span>.ch == <span class="string">&#x27; &#x27;</span> || <span class="built_in">this</span>.ch == <span class="string">&#x27;\r&#x27;</span> || <span class="built_in">this</span>.ch == <span class="string">&#x27;\n&#x27;</span> || <span class="built_in">this</span>.ch == <span class="string">&#x27;\t&#x27;</span> || <span class="built_in">this</span>.ch == <span class="string">&#x27;\f&#x27;</span> || <span class="built_in">this</span>.ch == <span class="string">&#x27;\b&#x27;</span>) &#123;</span><br><span class="line">                    <span class="built_in">this</span>.next();</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">this</span>.ch == <span class="string">&#x27;/&#x27;</span>) &#123;</span><br><span class="line">                    <span class="built_in">this</span>.skipComment();</span><br><span class="line">                    <span class="keyword">continue</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>可以看到具体实现，不仅可以跳过空格，换行之类的，还可以跳过注释（skipComment）<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">skipComment</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">this</span>.next();</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">this</span>.ch != <span class="string">&#x27;/&#x27;</span>) &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">this</span>.ch == <span class="string">&#x27;*&#x27;</span>) &#123;</span><br><span class="line">            <span class="built_in">this</span>.next();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span>(<span class="built_in">this</span>.ch != <span class="number">26</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span> (<span class="built_in">this</span>.ch == <span class="string">&#x27;*&#x27;</span>) &#123;</span><br><span class="line">                    <span class="built_in">this</span>.next();</span><br><span class="line">                    <span class="keyword">if</span> (<span class="built_in">this</span>.ch == <span class="string">&#x27;/&#x27;</span>) &#123;</span><br><span class="line">                        <span class="built_in">this</span>.next();</span><br><span class="line">                        <span class="keyword">return</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="built_in">this</span>.next();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">JSONException</span>(<span class="string">&quot;invalid comment&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">do</span> &#123;</span><br><span class="line">            <span class="built_in">this</span>.next();</span><br><span class="line">        &#125; <span class="keyword">while</span>(<span class="built_in">this</span>.ch != <span class="string">&#x27;\n&#x27;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">this</span>.next();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>那么就是/*xxxx*/<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&quot;@type&quot;</span>:<span class="string">&quot;Student&quot;</span>&#125;</span><br><span class="line">&#123; <span class="string">&quot;@type&quot;</span>:<span class="string">&quot;Student&quot;</span>&#125;</span><br><span class="line">&#123;<span class="comment">/**/&quot;<span class="doctag">@type</span>&quot;:&quot;Student&quot;&#125;</span></span><br><span class="line"><span class="comment">&#123;/*abcdef*/</span><span class="string">&quot;@type&quot;</span>:<span class="string">&quot;Student&quot;</span>&#125;</span><br></pre></td></tr></table></figure><br>那么这四种其实效果相同，都可以达到反序列化的目的</p>
+<h3 id="No3"><a href="#No3" class="headerlink" title="No3"></a>No3</h3><p>在走完上面的判断以后，接下来就是<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/10.jpg" alt><br>同样，根据字面意思和代码，大概推断就是判断有没有逗号，如果有就跳过<br>也就是<code>&#123;,,,,&quot;@type&quot;:&quot;Student&quot;&#125;</code>，也是可以进行正常反序列化的</p>
+<h3 id="No4"><a href="#No4" class="headerlink" title="No4"></a>No4</h3><p>继续往下走<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/11.jpg" alt><br>因为走完前面的一系列操作，那么当前的字符就是@type之前的双引号了<br>这里的scanSymbol很重要，主要就是扫描到下一个双引号出现之前的字符串，在这就是@type<br>其中有几段比较重要的特性，我这截取了部分代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (chLocal == <span class="string">&#x27;\\&#x27;</span>) &#123;</span><br><span class="line">    chLocal = <span class="built_in">this</span>.next();</span><br><span class="line">    <span class="keyword">switch</span>(chLocal) </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;u&#x27;</span>:</span><br><span class="line">            <span class="type">char</span> <span class="variable">c1</span> <span class="operator">=</span> <span class="built_in">this</span>.next();</span><br><span class="line">            <span class="type">char</span> <span class="variable">c2</span> <span class="operator">=</span> <span class="built_in">this</span>.next();</span><br><span class="line">            <span class="type">char</span> <span class="variable">c3</span> <span class="operator">=</span> <span class="built_in">this</span>.next();</span><br><span class="line">            <span class="type">char</span> <span class="variable">c4</span> <span class="operator">=</span> <span class="built_in">this</span>.next();</span><br><span class="line">            <span class="type">int</span> <span class="variable">val</span> <span class="operator">=</span> Integer.parseInt(<span class="keyword">new</span> <span class="title class_">String</span>(<span class="keyword">new</span> <span class="title class_">char</span>[]&#123;c1, c2, c3, c4&#125;), <span class="number">16</span>);</span><br><span class="line">            hash = <span class="number">31</span> * hash + val;</span><br><span class="line">            <span class="built_in">this</span>.putChar((<span class="type">char</span>)val);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> <span class="string">&#x27;x&#x27;</span>:</span><br><span class="line">            <span class="type">char</span> <span class="variable">x1</span> <span class="operator">=</span> <span class="built_in">this</span>.ch = <span class="built_in">this</span>.next();</span><br><span class="line">            <span class="type">char</span> <span class="variable">x2</span> <span class="operator">=</span> <span class="built_in">this</span>.ch = <span class="built_in">this</span>.next();</span><br><span class="line">            <span class="type">int</span> <span class="variable">x_val</span> <span class="operator">=</span> digits[x1] * <span class="number">16</span> + digits[x2];</span><br><span class="line">            <span class="type">char</span> <span class="variable">x_char</span> <span class="operator">=</span> (<span class="type">char</span>)x_val;</span><br><span class="line">            hash = <span class="number">31</span> * hash + x_char;</span><br><span class="line">            <span class="built_in">this</span>.putChar(x_char);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>什么意思呢，就是当遇见斜杠，那么就看斜杠后面第一个字母是什么<br>如果是u那就读取u后面4位，当作unicode解码<br>同理如果是x就当作十六进制解码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="string">&quot;@type&quot;</span>:<span class="string">&quot;Student&quot;</span>&#125;</span><br><span class="line">&#123;<span class="string">&quot;\u0040\u0074\u0079\u0070\u0065&quot;</span>:<span class="string">&quot;Student&quot;</span>&#125;</span><br><span class="line">&#123;<span class="string">&quot;\u0040\u0074\u0079pe&quot;</span>:<span class="string">&quot;Student&quot;</span>&#125;</span><br><span class="line">&#123;<span class="string">&quot;\x40\x74\x79\x70\x65&quot;</span>:<span class="string">&quot;Student&quot;</span>&#125;</span><br><span class="line">&#123;<span class="string">&quot;\x40\x74\x79pe&quot;</span>:<span class="string">&quot;Student&quot;</span>&#125;</span><br></pre></td></tr></table></figure><br>这上面5个json是等价的，都可以正常进行反序列化</p>
+<h3 id="No5"><a href="#No5" class="headerlink" title="No5"></a>No5</h3><p>提取完了@type这个键的字符串以后，就要解析键值了，在这里就是Student<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/12.jpg" alt><br>可以看到同样用到了scanSymbol，也就是说我们的类名也可以用十六进制和unicode去编码<br><code>&#123;&quot;\x40\x74\x79pe&quot;:&quot;\u0053\u0074\u0075dent&quot;&#125;</code><br>接着就进入到了loadClass了，动态加载类<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/13.jpg" alt><br>首先会在mappings中去找是否存在这些类，如果不存在就跳到<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (classLoader != <span class="literal">null</span>) &#123;</span><br><span class="line">    clazz = classLoader.loadClass(className);</span><br><span class="line">    mappings.put(className, clazz);</span><br><span class="line">    <span class="keyword">return</span> clazz;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>去动态加载类，并且将类和类名添加到mappings中，然后返回此类，这里的mappings其实是一个缓存，一般是java的原生类，关于动态加载类到底知识可以自己百度搜索一下，这里不细说</p>
+<blockquote>
+<p>小插曲<br>这里我注意到了中间两个if语句<br>第一个：如果第一个字符是“[”，那么就将他去掉，在进行loadClass<br>第二个：如果第一个字符是“L”,且结尾是“;”，那么也是去掉以后调用loadClass<br>这里我fuzz了一下<br><code>&#123;&quot;@type&quot;:&quot;[Student&quot;&#125;</code><br>中括号加在最前面会报错，不知道为什么，但是根据他的报错信息，我最后整理了一个新的可以利用的，在下一篇我会说一下我是如何找出这样的payload的<code>&#123;&quot;@type&quot;:&quot;[Student&quot;[&#123;,&quot;age&quot;:12,&quot;name&quot;:&quot;kaikaix&quot;&#125;</code><br><code>&#123;&quot;@type&quot;:&quot;LStudent;&quot;&#125;</code><br><code>&#123;&quot;@type&quot;:&quot;LLStudent;;&quot;&#125;</code><br>这样就不会报错，可以继续接下来的操作，调用无参构造和set方法</p>
+</blockquote>
+<h3 id="No6"><a href="#No6" class="headerlink" title="No6"></a>No6</h3><p>接下来到了<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/14.jpg" alt><br>我们进入到getDeserializer中，到了一个denyList的一个循环<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/15.jpg" alt><br>这里前面的replace是将“$”替换为“.”</p>
+<blockquote>
+<p>如果A类中有个内部类B<br>在编译的时候会生成A.class和A$B.class</p>
+</blockquote>
+<p>那么这一段代码就是用来检查你的类名是否在黑名单中，但是在这个版本的fastjson，黑名单只有两个Thread类</p>
+<h3 id="No7"><a href="#No7" class="headerlink" title="No7"></a>No7</h3><p>过了黑名单以后，就会与一些fastjson支持的类进行匹配，如果匹配到了就会返回相应的Deserializer<br>如果匹配不到就到下图代码中的地方<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/16.jpg" alt><br>进入到这个函数中会先获取一下clazz的父类，然后就到了这里<br><img src="/2022/12/01/fastjson%E5%88%9D%E5%AD%A6/17.jpg" alt><br>主要就是通过获取构造函数和一些成员方法构建了一个JavaBeanInfo类，并返回<br>感兴趣的可以自己调试看看内部到底做了些什么事情<br>之后就是调用set方法了，不知道为什么调试不了，就不分析了</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在写这篇文章之前也不知道一些绕过方法，只是分析了一下fastjson的原理，后面看到网上的那些方法，没想到我竟然凑巧把这些绕过payload自己搞出来了，还是有点小高兴。所以说知道原理还是很重要的。<br>在下一篇就研究一下fastjson的反序列化利用，和一些绕过payload</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="tag"># 代码审计</a>
+              <a href="/tags/java/" rel="tag"># java</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/11/29/webshell-%E5%A5%87%E6%B7%AB%E6%8A%80%E5%B7%A7%EF%BC%88php%EF%BC%89/" rel="prev" title="webshell-奇淫技巧（php）">
+      <i class="fa fa-chevron-left"></i> webshell-奇淫技巧（php）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#fastjson%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">fastjson基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-number">1.1.</span> <span class="nav-text">序列化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-number">1.2.</span> <span class="nav-text">反序列化</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">2.</span> <span class="nav-text">反序列化源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#No1"><span class="nav-number">2.1.</span> <span class="nav-text">No1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#No2"><span class="nav-number">2.2.</span> <span class="nav-text">No2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#No3"><span class="nav-number">2.3.</span> <span class="nav-text">No3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#No4"><span class="nav-number">2.4.</span> <span class="nav-text">No4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#No5"><span class="nav-number">2.5.</span> <span class="nav-text">No5</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#No6"><span class="nav-number">2.6.</span> <span class="nav-text">No6</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#No7"><span class="nav-number">2.7.</span> <span class="nav-text">No7</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kaikaix"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">kaikaix</p>
+  <div class="site-description" itemprop="description">小白</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">14</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kaikaix</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'e015cfd8a7113f83449a',
+      clientSecret: 'ead135fac6fb19fb1953358c28ee9b0dc1625f9a',
+      repo        : 'kaikaix.github.io',
+      owner       : 'kaikaix',
+      admin       : ['kaikaix'],
+      id          : 'b40c9f3fca948599549e5fbd1ab2ccce',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
