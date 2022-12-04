@@ -42,7 +42,7 @@
 <meta property="og:image" content="http://example.com/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/13.jpg">
 <meta property="og:image" content="http://example.com/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/14.jpg">
 <meta property="article:published_time" content="2022-12-04T18:24:16.000Z">
-<meta property="article:modified_time" content="2022-12-04T20:18:17.810Z">
+<meta property="article:modified_time" content="2022-12-04T21:02:02.194Z">
 <meta property="article:author" content="kaikaix">
 <meta property="article:tag" content="代码审计">
 <meta property="article:tag" content="java">
@@ -236,7 +236,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2022-12-05 02:24:16 / 修改时间：04:18:17" itemprop="dateCreated datePublished" datetime="2022-12-05T02:24:16+08:00">2022-12-05</time>
+              <time title="创建时间：2022-12-05 02:24:16 / 修改时间：05:02:02" itemprop="dateCreated datePublished" datetime="2022-12-05T02:24:16+08:00">2022-12-05</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -268,16 +268,22 @@
       
         <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>对Filter内存马原理的简单分析<br><span id="more"></span></p>
 <h2 id="Filter注册流程"><a href="#Filter注册流程" class="headerlink" title="Filter注册流程"></a>Filter注册流程</h2><p>用一张图来描述一下tomcat的基本加载流程<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/1.jpg" alt><br>可以看到FilterChain是在WrapperValue容器中调用的<br>而FilterChain，顾名思义，就是一个Filter的链，从第一个Filter一直传到最后一个Filter，然后才调用Servlet</p>
-<h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><p>首先调试Filter内存马需要先在pom.xml加<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.tomcat<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tomcat-catalina<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>9.0.67<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure><br>这里的version我选得是和我tomcat的版本一样，不知道有没有联系<br><strong>不加是无法调试的</strong></p>
+<h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><p>首先调试Filter内存马需要先在pom.xml加<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.tomcat<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tomcat-catalina<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">version</span>&gt;</span>9.0.67<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure><br>这里的version我选得是和我tomcat的版本一样，不知道有没有联系<br><strong>不加次依赖是无法调试的</strong></p>
 <p>先写一个简单的Filter容器<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.servlet.*;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebFilter;</span><br><span class="line"><span class="keyword">import</span> java.io.IOException;</span><br><span class="line"><span class="keyword">import</span> java.io.PrintWriter;</span><br><span class="line"></span><br><span class="line"><span class="meta">@WebFilter(urlPatterns = &quot;/*&quot;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FilterA</span> <span class="keyword">implements</span> <span class="title class_">Filter</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">init</span><span class="params">(FilterConfig filterConfig)</span> <span class="keyword">throws</span> ServletException &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">doFilter</span><span class="params">(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)</span> <span class="keyword">throws</span> IOException, ServletException &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;a: before&quot;</span>);</span><br><span class="line">        <span class="type">PrintWriter</span> <span class="variable">pw</span> <span class="operator">=</span> servletResponse.getWriter();</span><br><span class="line">        pw.write(<span class="string">&quot;aaaaaaaaa&quot;</span>);</span><br><span class="line"></span><br><span class="line">        filterChain.doFilter(servletRequest, servletResponse);</span><br><span class="line">        System.out.println(<span class="string">&quot;a: after&quot;</span>);</span><br><span class="line"></span><br><span class="line">        pw.write(<span class="string">&quot;&lt;br&gt;back&quot;</span>);</span><br><span class="line">        pw.flush();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">destroy</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>在doFilter第一行代码下断点，根据调用栈可以看到WrapperValue容器<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/2.jpg" alt></p>
 <p>进入WrapperValue，往上翻找可以看到filterChain的来源，在此处下断点，重新调试<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/3.jpg" alt></p>
 <p>进入createFilterChain，注意到这一行代码，可以看到这里面有我们的Filter链，是一个Map，另外一条应该是tomcat自带的filter，这行就是从context对象中获取现有的Filter链<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/4.jpg" alt><br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/5.jpg" alt></p>
 <p>往下到了一个循环处，是根据上面得到的filterMap，去依次从context中取出filterConfig<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/6.jpg" alt><br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/7.jpg" alt></p>
-<p>获取到filterConfig后就会将filterConfig加入filterChain中，且该filterChain对象中的filters列表也会添加filterConfig<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/8.jpg" alt></p>
+<p>获取到filterConfig后就会将filterConfig加入filterChain中，该filterChain对象中的filters列表会添加filterConfig<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/8.jpg" alt></p>
 <p>创建完FilterChain后，来到filterChain的doFilter方法<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/9.jpg" alt></p>
 <p>跟着调试，会进入internalDofilter方法，n是Filter个数，pos是当前是第几个Filter<br>首先会取出当前的filterConfig，并通过getFilter函数，从filterConfig取出filter对象<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/10.jpg" alt><br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/11.jpg" alt></p>
 <p>最后拿到filter对象了，通过doFilter调用具体的Filter，也就是我们写的那个demo<br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/12.jpg" alt><br><img src="/2022/12/05/Filter%E5%86%85%E5%AD%98%E9%A9%AC/13.jpg" alt></p>
 <p>那么该调用过程就分析的差不多了</p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><ul>
+<li>先从context中获取filterMaps</li>
+<li>根据filterMaps从context中取出filterConfig</li>
+<li>将filterConfig加入filterChain中，filterChain中的filters成员变量会添加filterConfig</li>
+<li>调用doFilter</li>
+</ul>
 <h2 id="内存马"><a href="#内存马" class="headerlink" title="内存马"></a>内存马</h2><p>通过上面的分析，我们知道如果想将木马注册到filter中，那么就需要context对象的两个参数</p>
 <ul>
 <li>filterMaps</li>
@@ -381,7 +387,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filter%E6%B3%A8%E5%86%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">Filter注册流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95"><span class="nav-number">2.1.</span> <span class="nav-text">调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E9%A9%AC"><span class="nav-number">3.</span> <span class="nav-text">内存马</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">3.1.</span> <span class="nav-text">参考文章</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Filter%E6%B3%A8%E5%86%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">Filter注册流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%B0%83%E8%AF%95"><span class="nav-number">2.1.</span> <span class="nav-text">调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B0%8F%E7%BB%93"><span class="nav-number">2.2.</span> <span class="nav-text">小结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E9%A9%AC"><span class="nav-number">3.</span> <span class="nav-text">内存马</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%AB%A0"><span class="nav-number">3.1.</span> <span class="nav-text">参考文章</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -397,7 +403,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -410,7 +416,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">20</span>
+        <span class="site-state-item-count">22</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
