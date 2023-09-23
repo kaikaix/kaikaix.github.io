@@ -900,8 +900,9 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本来这个系列的命名是叫xss入门的，再看了huli大佬的这系列文章以后，还是改为了前端安全。<br><span id="more"></span></p>
 <ul>
 <li><a href="https://ithelp.ithome.com.tw/users/20091346/ironman/6155">https://ithelp.ithome.com.tw/users/20091346/ironman/6155</a></li>
-<li><a href="https://blog.huli.tw/">https://blog.huli.tw/</a><br>因为是笔记，所以本文都是对于huli大佬的文章的总结和拓展，所以就把参考文章直接放到下面了</li>
+<li><a href="https://blog.huli.tw/">https://blog.huli.tw/</a></li>
 </ul>
+<p>因为是笔记，所以本文都是对于huli大佬的文章的总结和拓展，所以就把参考文章直接放到下面了</p>
 <h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><ul>
 <li><a href="https://ithelp.ithome.com.tw/articles/10314125">https://ithelp.ithome.com.tw/articles/10314125</a></li>
 </ul>
@@ -922,7 +923,46 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
 <p>当然也有方法可以拿到其他网站的信息<br><a href="https://bugs.chromium.org/p/chromium/issues/detail?id=1359122&amp;q=subdomain%20host%20leak&amp;can=1">https://bugs.chromium.org/p/chromium/issues/detail?id=1359122&amp;q=subdomain%20host%20leak&amp;can=1</a></p>
 ]]></content>
       <categories>
-        <category>xss</category>
+        <category>前端安全</category>
+      </categories>
+      <tags>
+        <tag>javascript</tag>
+        <tag>xss</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>前端安全2-基础xss（笔记）</title>
+    <url>/2023/09/20/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A82-%E5%9F%BA%E7%A1%80xss%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</url>
+    <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>聊一下基础的xss，等着huli大佬写奇淫技巧<br><span id="more"></span></p>
+<ul>
+<li><a href="https://ithelp.ithome.com.tw/articles/10314883">https://ithelp.ithome.com.tw/articles/10314883</a></li>
+</ul>
+<h2 id="触发js代码"><a href="#触发js代码" class="headerlink" title="触发js代码"></a>触发js代码</h2><p>一般来说是用script标签去触发的<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="number">1</span>)&lt;/script&gt;</span><br></pre></td></tr></table></figure><br>但是除了script标签，还可以用inline event handler来进行触发<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;img src=<span class="string">&quot;not_exist&quot;</span> onerror=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span>点我<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml">&lt;svg/onload=alert(1)&gt;</span></span><br></pre></td></tr></table></figure><br>常见的用来触发event handler的有</p>
+<ul>
+<li>onerror</li>
+<li>onload</li>
+<li>onfocus</li>
+<li>onblur</li>
+<li>onanimationend</li>
+<li>onclick</li>
+<li>onmouseenter</li>
+</ul>
+<p>等等</p>
+<p>当然还可以用伪协议去触发js<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;a href=<span class="attr">javascript</span>:<span class="title function_">alert</span>(<span class="number">1</span>)&gt;<span class="title class_">Link</span>&lt;/a&gt;</span><br></pre></td></tr></table></figure><br>这里有个值得注意的点，可以把href后面的伪协议当做字符串，这时候如果用了html编码也可以触发js<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;a href=&amp;#x6a;<span class="attr">avascript</span>:<span class="title function_">alert</span>(<span class="number">1</span>)&gt;<span class="title class_">Link</span>&lt;/a&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在这个网站有更多的payload<br><a href="https://portswigger.net/web-security/cross-site-scripting/cheat-sheet">https://portswigger.net/web-security/cross-site-scripting/cheat-sheet</a></p>
+<h2 id="不同的xss"><a href="#不同的xss" class="headerlink" title="不同的xss"></a>不同的xss</h2><h3 id="注入html"><a href="#注入html" class="headerlink" title="注入html"></a>注入html</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"> <span class="keyword">echo</span> <span class="string">&quot;Hello, &lt;h1&gt;&quot;</span> . <span class="variable">$_GET</span>[<span class="string">&#x27;name&#x27;</span>] . <span class="string">&#x27;&lt;/h1&gt;&#x27;</span>;</span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>这种就直接htmlspecialchar就可以过滤了，比较常见不多赘述了</p>
+<h3 id="注入属性"><a href="#注入属性" class="headerlink" title="注入属性"></a>注入属性</h3><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;div id=<span class="string">&quot;content&quot;</span>&gt;&lt;/div&gt;</span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="language-javascript"></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">const</span> qs = <span class="keyword">new</span> <span class="title class_">URLSearchParams</span>(<span class="variable language_">window</span>.<span class="property">location</span>.<span class="property">search</span>)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="keyword">const</span> clazz = qs.<span class="title function_">get</span>(<span class="string">&#x27;clazz&#x27;</span>)</span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml">  <span class="variable language_">document</span>.<span class="title function_">querySelector</span>(<span class="string">&#x27;#content&#x27;</span>).<span class="property">innerHTML</span> = <span class="string">`</span></span></span></span><br><span class="line"><span class="string"><span class="language-javascript"><span class="language-xml">    &lt;div class=&quot;<span class="subst">$&#123;clazz&#125;</span>&quot;&gt;</span></span></span></span><br><span class="line"><span class="string"><span class="language-javascript"><span class="language-xml">      Demo</span></span></span></span><br><span class="line"><span class="string"><span class="language-javascript"><span class="language-xml">    &lt;/div&gt;</span></span></span></span><br><span class="line"><span class="string"><span class="language-javascript"><span class="language-xml">  `</span></span></span></span><br><span class="line"><span class="language-javascript"><span class="language-xml"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span></span><br></pre></td></tr></table></figure>
+<p>这段代码会获取get参数的clazz，并拼接到<code>&lt;div class=&quot;&quot;&gt;</code>中</p>
+<p>那么注入xss的方式有几种</p>
+<p>第一种闭合div，增加一个标签<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot;&gt;&lt;img src=not_exist onerror=alert(1)&gt;</span></span><br></pre></td></tr></table></figure><br>那么代码就会变为<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;div <span class="keyword">class</span>=<span class="string">&quot;&quot;</span>&gt;<span class="language-xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">not_exist</span> <span class="attr">onerror</span>=<span class="string">alert(1)</span>&gt;</span>&quot;&gt;</span></span><br><span class="line"><span class="language-xml">  Demo</span></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>第二种闭合”然后增加属性<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="string">&quot; tabindex=1 onfocus=&quot;</span><span class="title function_">alert</span>(<span class="number">1</span>)<span class="string">&quot; x=&quot;</span></span><br></pre></td></tr></table></figure><br>那么就会变成<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">&lt;div <span class="keyword">class</span>=<span class="string">&quot;&quot;</span> tabindex=<span class="number">1</span> onfocus=<span class="string">&quot;alert(1)&quot;</span> x=<span class="string">&quot;&quot;</span>&gt;</span><br><span class="line">  <span class="title class_">Demo</span></span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<h3 id="注入到js中"><a href="#注入到js中" class="headerlink" title="注入到js中"></a>注入到js中</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  <span class="keyword">const</span> <span class="variable constant_">name</span> = `<span class="meta">&lt;?php</span> <span class="keyword">echo</span> <span class="title function_ invoke__">htmlspeicalchars</span>(<span class="variable">$_GET</span>[<span class="string">&#x27;name&#x27;</span>]) <span class="meta">?&gt;</span>`;</span><br><span class="line">  <span class="title function_ invoke__">alert</span>(name);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>当代码是这样的时候<br><code>?name=$&#123;alert(1)&#125;</code>可以用这种语句去注入js</p>
+<p>如果是用双引号的形式，如下<br><figure class="highlight php"><table><tr><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  <span class="keyword">const</span> <span class="variable constant_">name</span> = <span class="string">&quot;&lt;?php echo htmlspeicalchars(<span class="subst">$_GET</span>[&#x27;name&#x27;]) ?&gt;&quot;</span>;</span><br><span class="line">  <span class="title function_ invoke__">alert</span>(name);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure><br>这样可能就没法进行注入js了，但是如果没有htmlspeicalchars过滤的话，就可以用闭合<code>&quot;</code>或者闭合<code>&lt;script&gt;</code>标签进行注入,在注入其他标签<br>例如<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">name=<span class="string">&quot;;alert(1);&quot;</span></span><br><span class="line">name=&lt;/script&gt;<span class="language-xml"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">1</span> <span class="attr">onerror</span>=<span class="string">alert(1)</span>&gt;</span></span></span><br></pre></td></tr></table></figure></p>
+]]></content>
+      <categories>
+        <category>前端安全</category>
       </categories>
       <tags>
         <tag>javascript</tag>
