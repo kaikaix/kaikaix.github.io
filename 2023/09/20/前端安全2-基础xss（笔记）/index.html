@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言聊一下基础的xss，等着huli大佬写奇淫技巧">
+  <meta name="description" content="前言聊一下基础的xss，等着huli大佬写奇淫技巧  https:&#x2F;&#x2F;ithelp.ithome.com.tw&#x2F;articles&#x2F;10314883">
 <meta property="og:type" content="article">
 <meta property="og:title" content="前端安全2-基础xss（笔记）">
 <meta property="og:url" content="http://example.com/2023/09/20/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A82-%E5%9F%BA%E7%A1%80xss%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/index.html">
 <meta property="og:site_name" content="kaikaix">
-<meta property="og:description" content="前言聊一下基础的xss，等着huli大佬写奇淫技巧">
+<meta property="og:description" content="前言聊一下基础的xss，等着huli大佬写奇淫技巧  https:&#x2F;&#x2F;ithelp.ithome.com.tw&#x2F;articles&#x2F;10314883">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-09-20T09:18:25.000Z">
-<meta property="article:modified_time" content="2023-09-23T11:22:14.007Z">
+<meta property="article:modified_time" content="2023-09-23T16:23:56.392Z">
 <meta property="article:author" content="kaikaix">
 <meta property="article:tag" content="javascript">
 <meta property="article:tag" content="xss">
@@ -226,7 +226,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-23 19:22:14" itemprop="dateModified" datetime="2023-09-23T19:22:14+08:00">2023-09-23</time>
+                <time title="修改时间：2023-09-24 00:23:56" itemprop="dateModified" datetime="2023-09-24T00:23:56+08:00">2023-09-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -256,9 +256,10 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>聊一下基础的xss，等着huli大佬写奇淫技巧<br><span id="more"></span></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>聊一下基础的xss，等着huli大佬写奇淫技巧</p>
 <ul>
-<li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10314883">https://ithelp.ithome.com.tw/articles/10314883</a></li>
+<li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10314883">https://ithelp.ithome.com.tw/articles/10314883</a><span id="more"></span>
+</li>
 </ul>
 <h2 id="触发js代码"><a href="#触发js代码" class="headerlink" title="触发js代码"></a>触发js代码</h2><p>一般来说是用script标签去触发的<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;<span class="title function_">alert</span>(<span class="number">1</span>)&lt;/script&gt;</span><br></pre></td></tr></table></figure><br>但是除了script标签，还可以用inline event handler来进行触发<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;img src=<span class="string">&quot;not_exist&quot;</span> onerror=<span class="string">&quot;alert(1)&quot;</span>&gt;</span><br><span class="line"></span><br><span class="line"><span class="language-xml"><span class="tag">&lt;<span class="name">button</span> <span class="attr">onclick</span>=<span class="string">&quot;alert(1)&quot;</span>&gt;</span>点我<span class="tag">&lt;/<span class="name">button</span>&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="language-xml">&lt;svg/onload=alert(1)&gt;</span></span><br></pre></td></tr></table></figure><br>常见的用来触发event handler的有</p>
 <ul>
@@ -384,7 +385,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
