@@ -191,6 +191,180 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/25/%E5%88%B7%E9%A2%981/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="kaikaix">
+      <meta itemprop="description" content="小白">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kaikaix">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/25/%E5%88%B7%E9%A2%981/" class="post-title-link" itemprop="url">刷题1</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2023-09-25 22:43:14" itemprop="dateCreated datePublished" datetime="2023-09-25T22:43:14+08:00">2023-09-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2023-09-26 00:53:14" itemprop="dateModified" datetime="2023-09-26T00:53:14+08:00">2023-09-26</time>
+              </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          输入密码阅读
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2023/09/25/%E5%88%B7%E9%A2%981/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="kaikaix">
+      <meta itemprop="description" content="小白">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kaikaix">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/" class="post-title-link" itemprop="url">前端安全5-CSP（笔记）</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-09-24 11:04:11 / 修改时间：15:10:13" itemprop="dateCreated datePublished" datetime="2023-09-24T11:04:11+08:00">2023-09-24</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">前端安全</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>因为绕过的方式太多，有时候一不小心就会写出一个含有xss漏洞的代码，这时候要怎么去防御。那么就是依靠CSP进行防御了</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10315612">https://ithelp.ithome.com.tw/articles/10315612</a></li>
+</ul>
+<h2 id="Content-Security-Policy"><a href="#Content-Security-Policy" class="headerlink" title="Content Security Policy"></a>Content Security Policy</h2><p>网页要加上CSP策略有3种方法</p>
+<ul>
+<li>HTTP Respond header加上 Content-Security-Policy</li>
+<li>加上<code>meta</code>标签</li>
+<li><h3 style="text-decoration: line-through;">iframe标签，在本章不讲</h3>
+
+</li>
+</ul>
+<p>先看个简单的案例<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Security-Policy&quot;</span> <span class="attr">content</span>=<span class="string">&quot;script-src &#x27;none&#x27;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  CSP test</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure><br>上面的html并不会有弹窗，因为被csp策略阻止了<br><img src="/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/1.png" alt><br><code>script-src &#39;none&#39;</code>的意思就是禁止任何脚本执行，包括</p>
+<h2 id="CSP规则"><a href="#CSP规则" class="headerlink" title="CSP规则"></a>CSP规则</h2><p>在上面的例子就用了<code>script-src &#39;none&#39;</code>导致了任何的脚本都不会被执行，包括onerror那些<br><code>default-src</code>就是预设的指示，如果某个指示，例如<code>script-src</code>没有设置任何规则，那么就会使用<code>default-src</code>的规则。<br>但是有几个是不会使用<code>default-src</code>的内容的，如下</p>
+<ul>
+<li>base-uri</li>
+<li>form-action</li>
+<li>frame-ancestors</li>
+<li>report-uri</li>
+<li>sandbox</li>
+</ul>
+<p>详细内容请看<br><a target="_blank" rel="noopener" href="https://content-security-policy.com/default-src/">https://content-security-policy.com/default-src/</a></p>
+<p>还有其他的指示，我这里直接使用huli佬的<br><img src="/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/2.png" alt><br>下面两个链接是官方文档</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy">https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy</a></li>
+<li><a target="_blank" rel="noopener" href="https://content-security-policy.com">https://content-security-policy.com</a></li>
+</ul>
+<p>当然，每个指示都会有相应的规则，那么一般使用哪些规则呢，我这里也偷懒直接用huli佬的截图</p>
+<p><img src="/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/3.png" alt></p>
+<p>例如<code>script-src *</code>就相当于运行除了<code>data:</code>,<code>blob:</code>，还有<code>file:</code>,demo如下<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Security-Policy&quot;</span> <span class="attr">content</span>=<span class="string">&quot;script-src *&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">test.js</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  CSP test</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure><br>但是直接运行的话，就像下面的代码<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Security-Policy&quot;</span> <span class="attr">content</span>=<span class="string">&quot;script-src *&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  CSP test</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure><br><img src="/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/4.png" alt></p>
+<p>这种直接运行的还是不行。只能用加载url的方式。<br>想直接运行代码，还是得用<code>unsafe-inline</code></p>
+<h3 id="script-src-规则"><a href="#script-src-规则" class="headerlink" title="script-src 规则"></a>script-src 规则</h3><p>接下来详细讲讲script-src规则。</p>
+<p>我这里用一段python代码完成这个，也方便以后的操作<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">message = <span class="string">&quot;alert(1)&quot;</span></span><br><span class="line">hash_object = hashlib.sha256(message.encode())</span><br><span class="line">hash_base64 = base64.b64encode(hash_object.digest())</span><br><span class="line"><span class="built_in">print</span>(hash_base64.decode())</span><br></pre></td></tr></table></figure><br><img src="/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/5.png" alt></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">&quot;Content-Security-Policy&quot;</span> <span class="attr">content</span>=<span class="string">&quot;script-src &#x27;sha256-bhHHL3z2vDgxUt0W3dWQOrprscmda2Y5pLsLg4GF+pI=&#x27;&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">script</span>&gt;</span>alert(1)<span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">  CSP test</span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>回到原话题，</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A84-Sanitization%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -786,168 +960,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/07/hessian%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cat.jpg">
-      <meta itemprop="name" content="kaikaix">
-      <meta itemprop="description" content="小白">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="kaikaix">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/07/hessian%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/" class="post-title-link" itemprop="url">hessian反序列化</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-07 23:17:04" itemprop="dateCreated datePublished" datetime="2023-09-07T23:17:04+08:00">2023-09-07</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-13 13:28:41" itemprop="dateModified" datetime="2023-09-13T13:28:41+08:00">2023-09-13</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/java/" itemprop="url" rel="index"><span itemprop="name">java</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="入门Hessian反序列化"><a href="#入门Hessian反序列化" class="headerlink" title="入门Hessian反序列化"></a>入门Hessian反序列化</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/07/hessian%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2023/09/06/%E5%89%8D%E7%AB%AFctf/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/cat.jpg">
-      <meta itemprop="name" content="kaikaix">
-      <meta itemprop="description" content="小白">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="kaikaix">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/06/%E5%89%8D%E7%AB%AFctf/" class="post-title-link" itemprop="url">前端ctf(持续更新)</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2023-09-06 08:27:30" itemprop="dateCreated datePublished" datetime="2023-09-06T08:27:30+08:00">2023-09-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2023-09-23 23:32:41" itemprop="dateModified" datetime="2023-09-23T23:32:41+08:00">2023-09-23</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/" itemprop="url" rel="index"><span itemprop="name">前端安全</span></a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>持续更新一些国外的前端ctf，因为接触的前端偏少，这里就集中写一下wp<br></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/06/%E5%89%8D%E7%AB%AFctf/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1019,7 +1031,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
