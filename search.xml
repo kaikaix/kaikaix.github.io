@@ -1032,10 +1032,8 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
     <url>/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</url>
     <content><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>因为绕过的方式太多，有时候一不小心就会写出一个含有xss漏洞的代码，这时候要怎么去防御。那么就是依靠CSP进行防御了</p>
 <ul>
-<li><a href="https://ithelp.ithome.com.tw/articles/10315612">https://ithelp.ithome.com.tw/articles/10315612</a></li>
-</ul>
-<h2 id="Content-Security-Policy"><a href="#Content-Security-Policy" class="headerlink" title="Content Security Policy"></a>Content Security Policy</h2><p>网页要加上CSP策略有3种方法</p>
-<ul>
+<li><a href="https://ithelp.ithome.com.tw/articles/10315612">https://ithelp.ithome.com.tw/articles/10315612</a><span id="more"></span>
+<h2 id="Content-Security-Policy"><a href="#Content-Security-Policy" class="headerlink" title="Content Security Policy"></a>Content Security Policy</h2>网页要加上CSP策略有3种方法</li>
 <li>HTTP Respond header加上 Content-Security-Policy</li>
 <li>加上<code>meta</code>标签</li>
 <li><h3 style="text-decoration: line-through;">iframe标签，在本章不讲</h3>
