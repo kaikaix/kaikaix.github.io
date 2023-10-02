@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2023-10-02T05:18:40.272Z</updated>
+  <updated>2023-10-02T05:39:35.346Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>前端安全7-原型链污染（笔记）</title>
+    <link href="http://example.com/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A87-%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>http://example.com/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A87-%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <published>2023-10-02T05:24:12.000Z</published>
+    <updated>2023-10-02T05:39:35.346Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>以前一直以为原型链污染是后端污染一下那些渲染的中间件什么的，看了google ctf那题，发现前端也可以用这种思路</p><ul><li><a href="https://ithelp.ithome.com.tw/articles/10317892">https://ithelp.ithome.com.tw/articles/10317892</a><blockquote><p>有几章我跳过了，因为感觉都是些历史漏洞，就不太想再发文章去记录，但是也是很有知道的必要<br><a href="https://ithelp.ithome.com.tw/articles/10317133">Universal XSS</a><br><a href="https://ithelp.ithome.com.tw/articles/10316778">Mutation XSS</a></p><span id="more"></span></blockquote></li></ul>]]></content>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h1&gt;&lt;p&gt;以前一直以为原型链污染是后端污染一下那些渲染的中间件什么的，看了google ctf那题，发现前端也可以用这种思路&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&quot;https://ithelp.ithome.com.tw/articles/10317892&quot;&gt;https://ithelp.ithome.com.tw/articles/10317892&lt;/a&gt;&lt;blockquote&gt;
+&lt;p&gt;有几章我跳过了，因为感觉都是些历史漏洞，就不太想再发文章去记录，但是也是很有知道的必要&lt;br&gt;&lt;a href=&quot;https://ithelp.ithome.com.tw/articles/10317133&quot;&gt;Universal XSS&lt;/a&gt;&lt;br&gt;&lt;a href=&quot;https://ithelp.ithome.com.tw/articles/10316778&quot;&gt;Mutation XSS&lt;/a&gt;&lt;/p&gt;&lt;/blockquote&gt;&lt;/li&gt;&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    
+    
+    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    
+    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    
+  </entry>
   
   <entry>
     <title>前端安全6-CSP绕过（笔记）</title>
@@ -463,39 +489,6 @@
     <category term="log4j" scheme="http://example.com/tags/log4j/"/>
     
     <category term="jndi" scheme="http://example.com/tags/jndi/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>基于mvc框架的cms分析(没时间写)</title>
-    <link href="http://example.com/2023/02/28/%E5%9F%BA%E4%BA%8Emvc%E6%A1%86%E6%9E%B6%E7%9A%84cms%E5%88%86%E6%9E%90/"/>
-    <id>http://example.com/2023/02/28/%E5%9F%BA%E4%BA%8Emvc%E6%A1%86%E6%9E%B6%E7%9A%84cms%E5%88%86%E6%9E%90/</id>
-    <published>2023-02-28T12:05:46.000Z</published>
-    <updated>2023-04-19T12:39:52.199Z</updated>
-    
-    <content type="html"><![CDATA[<!-- ## MVC的简单理解基本上网上很多资料是有关于MVC，和类似这张图的![](1.png)其实在php中，我审计过的一两个基于MVC框架的phpcms，基本上可以通俗的理解为+ Model：与数据库相关+ Controller： 与处理相应的请求有关，也就是会牵扯到路由+ View：与html有关，就是最后渲染出来的结果## 分析路由拿到一个基于MVC框架的phpcms，首先就是要分析他的路由，也就是Controller，一般URL链接都是长这样`index.php?c=Controller&a=Action&d=do`+ c代表文件夹+ a代表文件，+ d代表文件中的函数 -->]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;!-- ## MVC的简单理解
-基本上网上很多资料是有关于MVC，和类似这张图的
-![](1.png)
-其实在php中，我审计过的一两个基于MVC框架的phpcms，基本上可以通俗的理解为
-+ Model：与数据库相关
-+ Controller： 与处理相应的请求有关，也就是会</summary>
-      
-    
-    
-    
-    <category term="代码审计" scheme="http://example.com/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
-    
-    
-    <category term="代码审计" scheme="http://example.com/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
-    
-    <category term="php" scheme="http://example.com/tags/php/"/>
-    
-    <category term="mvc" scheme="http://example.com/tags/mvc/"/>
     
   </entry>
   

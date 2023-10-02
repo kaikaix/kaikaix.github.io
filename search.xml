@@ -1148,4 +1148,24 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
         <tag>xss</tag>
       </tags>
   </entry>
+  <entry>
+    <title>前端安全7-原型链污染（笔记）</title>
+    <url>/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A87-%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>以前一直以为原型链污染是后端污染一下那些渲染的中间件什么的，看了google ctf那题，发现前端也可以用这种思路</p>
+<ul>
+<li><a href="https://ithelp.ithome.com.tw/articles/10317892">https://ithelp.ithome.com.tw/articles/10317892</a><blockquote>
+<p>有几章我跳过了，因为感觉都是些历史漏洞，就不太想再发文章去记录，但是也是很有知道的必要<br><a href="https://ithelp.ithome.com.tw/articles/10317133">Universal XSS</a><br><a href="https://ithelp.ithome.com.tw/articles/10316778">Mutation XSS</a></p>
+<span id="more"></span>
+</blockquote>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>前端安全</category>
+      </categories>
+      <tags>
+        <tag>javascript</tag>
+        <tag>xss</tag>
+      </tags>
+  </entry>
 </search>
