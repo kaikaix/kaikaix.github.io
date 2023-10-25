@@ -1359,9 +1359,10 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
   <entry>
     <title>前端安全9-CSTI（笔记）</title>
     <url>/2023/10/13/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A89-CSTI%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</url>
-    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前端的SSTI，也就是C就是client。</p>
+    <content><![CDATA[<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>前端的SSTI，也就是C就是client。这篇没有太多可记的点，想深入又太深了，只能讲些较浅的。</p>
 <ul>
-<li><a href="https://aszx87410.github.io/beyond-xss/ch3/csti/">https://aszx87410.github.io/beyond-xss/ch3/csti/</a></li>
+<li><a href="https://aszx87410.github.io/beyond-xss/ch3/csti/">https://aszx87410.github.io/beyond-xss/ch3/csti/</a><span id="more"></span>
+</li>
 </ul>
 <h1 id="AngularJS"><a href="#AngularJS" class="headerlink" title="AngularJS"></a>AngularJS</h1><p>在模板中，因为无法存取到window，就不存在<code>alert</code>，那如果想弹窗应该怎么办。<br><figure class="highlight js"><table><tr><td class="code"><pre><span class="line">constructor.<span class="title function_">constructor</span>(<span class="params"><span class="string">&#x27;alert(1)&#x27;</span></span>)(<span class="params"></span>)</span><br></pre></td></tr></table></figure><br>可以用上面的代码去创建一个匿名函数去执行<code>alert</code></p>
 <blockquote>
@@ -1435,5 +1436,10 @@ y= w_{\mathrm{area}} \cdot area + w_{\mathrm{age}} \cdot age + b + \epsilon</scr
         <tag>python</tag>
         <tag>域渗透</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>前端安全10-CSS injection（笔记）</title>
+    <url>/2023/10/26/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A810-CSS-injection%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</url>
+    <content><![CDATA[<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
   </entry>
 </search>
