@@ -3,11 +3,11 @@
   <title>kaikaix</title>
   
   <subtitle>小白</subtitle>
-  <link href="http://example.com/atom.xml" rel="self"/>
+  <link href="https://kaikaix.github.io/atom.xml" rel="self"/>
   
-  <link href="http://example.com/"/>
-  <updated>2023-11-03T09:33:41.559Z</updated>
-  <id>http://example.com/</id>
+  <link href="https://kaikaix.github.io/"/>
+  <updated>2023-11-03T17:29:43.536Z</updated>
+  <id>https://kaikaix.github.io/</id>
   
   <author>
     <name>kaikaix</name>
@@ -17,11 +17,11 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>n1ctf 2023 复现</title>
-    <link href="http://example.com/2023/11/03/n1ctf-2023-%E5%A4%8D%E7%8E%B0/"/>
-    <id>http://example.com/2023/11/03/n1ctf-2023-%E5%A4%8D%E7%8E%B0/</id>
-    <published>2023-11-03T09:33:41.000Z</published>
-    <updated>2023-11-03T09:33:41.559Z</updated>
+    <title>前端安全11-同源与Site（笔记）</title>
+    <link href="https://kaikaix.github.io/2023/11/04/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A811-%E5%90%8C%E6%BA%90%E4%B8%8ESite%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/11/04/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A811-%E5%90%8C%E6%BA%90%E4%B8%8ESite%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <published>2023-11-03T17:29:43.000Z</published>
+    <updated>2023-11-03T17:29:43.536Z</updated>
     
     <content type="html"><![CDATA[<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>]]></content>
     
@@ -38,8 +38,8 @@
   
   <entry>
     <title>前端安全10-CSS injection（笔记）</title>
-    <link href="http://example.com/2023/10/26/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A810-CSS-injection%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/10/26/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A810-CSS-injection%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/10/26/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A810-CSS-injection%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/10/26/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A810-CSS-injection%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-10-25T20:18:11.000Z</published>
     <updated>2023-11-03T09:34:41.915Z</updated>
     
@@ -52,19 +52,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>从impacket源码分析SPN</title>
-    <link href="http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/"/>
-    <id>http://example.com/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/</id>
+    <link href="https://kaikaix.github.io/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/"/>
+    <id>https://kaikaix.github.io/2023/10/25/%E4%BB%8Eimpacket%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90SPN/</id>
     <published>2023-10-25T06:35:57.000Z</published>
     <updated>2023-10-25T15:35:57.943Z</updated>
     
@@ -75,19 +75,19 @@
     
     
     
-    <category term="域渗透" scheme="http://example.com/categories/%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
+    <category term="域渗透" scheme="https://kaikaix.github.io/categories/%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
     
     
-    <category term="python" scheme="http://example.com/tags/python/"/>
+    <category term="python" scheme="https://kaikaix.github.io/tags/python/"/>
     
-    <category term="域渗透" scheme="http://example.com/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
+    <category term="域渗透" scheme="https://kaikaix.github.io/tags/%E5%9F%9F%E6%B8%97%E9%80%8F/"/>
     
   </entry>
   
   <entry>
     <title>刷题3</title>
-    <link href="http://example.com/2023/10/14/%E5%88%B7%E9%A2%983/"/>
-    <id>http://example.com/2023/10/14/%E5%88%B7%E9%A2%983/</id>
+    <link href="https://kaikaix.github.io/2023/10/14/%E5%88%B7%E9%A2%983/"/>
+    <id>https://kaikaix.github.io/2023/10/14/%E5%88%B7%E9%A2%983/</id>
     <published>2023-10-14T15:07:08.000Z</published>
     <updated>2023-10-31T04:48:06.622Z</updated>
     
@@ -103,8 +103,8 @@
   
   <entry>
     <title>前端安全9-CSTI（笔记）</title>
-    <link href="http://example.com/2023/10/13/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A89-CSTI%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/10/13/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A89-CSTI%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/10/13/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A89-CSTI%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/10/13/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A89-CSTI%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-10-13T13:19:08.000Z</published>
     <updated>2023-10-25T20:19:42.106Z</updated>
     
@@ -117,19 +117,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>前端安全8-DOM Clobbering（笔记）</title>
-    <link href="http://example.com/2023/10/13/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A88-DOM-Clobbering%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/10/13/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A88-DOM-Clobbering%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/10/13/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A88-DOM-Clobbering%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/10/13/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A88-DOM-Clobbering%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-10-12T18:08:21.000Z</published>
     <updated>2023-11-01T09:42:09.947Z</updated>
     
@@ -142,19 +142,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>用codeql分析JDBC反序列化</title>
-    <link href="http://example.com/2023/10/07/%E7%94%A8codeql%E5%88%86%E6%9E%90JDBC%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
-    <id>http://example.com/2023/10/07/%E7%94%A8codeql%E5%88%86%E6%9E%90JDBC%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</id>
+    <link href="https://kaikaix.github.io/2023/10/07/%E7%94%A8codeql%E5%88%86%E6%9E%90JDBC%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/"/>
+    <id>https://kaikaix.github.io/2023/10/07/%E7%94%A8codeql%E5%88%86%E6%9E%90JDBC%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96/</id>
     <published>2023-10-07T09:18:15.000Z</published>
     <updated>2023-10-13T10:25:07.379Z</updated>
     
@@ -165,21 +165,21 @@
     
     
     
-    <category term="codeql" scheme="http://example.com/categories/codeql/"/>
+    <category term="codeql" scheme="https://kaikaix.github.io/categories/codeql/"/>
     
     
-    <category term="代码审计" scheme="http://example.com/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
+    <category term="代码审计" scheme="https://kaikaix.github.io/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"/>
     
-    <category term="java" scheme="http://example.com/tags/java/"/>
+    <category term="java" scheme="https://kaikaix.github.io/tags/java/"/>
     
-    <category term="codeql" scheme="http://example.com/tags/codeql/"/>
+    <category term="codeql" scheme="https://kaikaix.github.io/tags/codeql/"/>
     
   </entry>
   
   <entry>
     <title>读写锁</title>
-    <link href="http://example.com/2023/10/06/%E8%AF%BB%E5%86%99%E9%94%81/"/>
-    <id>http://example.com/2023/10/06/%E8%AF%BB%E5%86%99%E9%94%81/</id>
+    <link href="https://kaikaix.github.io/2023/10/06/%E8%AF%BB%E5%86%99%E9%94%81/"/>
+    <id>https://kaikaix.github.io/2023/10/06/%E8%AF%BB%E5%86%99%E9%94%81/</id>
     <published>2023-10-06T13:13:27.000Z</published>
     <updated>2023-10-07T00:21:32.808Z</updated>
     
@@ -190,19 +190,19 @@
     
     
     
-    <category term="多线程" scheme="http://example.com/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
+    <category term="多线程" scheme="https://kaikaix.github.io/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B/"/>
     
     
-    <category term="java" scheme="http://example.com/tags/java/"/>
+    <category term="java" scheme="https://kaikaix.github.io/tags/java/"/>
     
-    <category term="thread" scheme="http://example.com/tags/thread/"/>
+    <category term="thread" scheme="https://kaikaix.github.io/tags/thread/"/>
     
   </entry>
   
   <entry>
     <title>刷题2</title>
-    <link href="http://example.com/2023/10/02/%E5%88%B7%E9%A2%982/"/>
-    <id>http://example.com/2023/10/02/%E5%88%B7%E9%A2%982/</id>
+    <link href="https://kaikaix.github.io/2023/10/02/%E5%88%B7%E9%A2%982/"/>
+    <id>https://kaikaix.github.io/2023/10/02/%E5%88%B7%E9%A2%982/</id>
     <published>2023-10-02T07:33:28.000Z</published>
     <updated>2023-10-17T09:25:24.541Z</updated>
     
@@ -218,8 +218,8 @@
   
   <entry>
     <title>前端安全7-原型链污染（笔记）</title>
-    <link href="http://example.com/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A87-%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A87-%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A87-%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A87-%E5%8E%9F%E5%9E%8B%E9%93%BE%E6%B1%A1%E6%9F%93%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-10-02T05:24:12.000Z</published>
     <updated>2023-10-13T00:32:32.567Z</updated>
     
@@ -235,19 +235,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>前端安全6-CSP绕过（笔记）</title>
-    <link href="http://example.com/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A86-CSP%E7%BB%95%E8%BF%87%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A86-CSP%E7%BB%95%E8%BF%87%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A86-CSP%E7%BB%95%E8%BF%87%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/10/02/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A86-CSP%E7%BB%95%E8%BF%87%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-10-01T17:20:04.000Z</published>
     <updated>2023-10-02T05:18:40.272Z</updated>
     
@@ -260,19 +260,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>刷题1</title>
-    <link href="http://example.com/2023/09/25/%E5%88%B7%E9%A2%981/"/>
-    <id>http://example.com/2023/09/25/%E5%88%B7%E9%A2%981/</id>
+    <link href="https://kaikaix.github.io/2023/09/25/%E5%88%B7%E9%A2%981/"/>
+    <id>https://kaikaix.github.io/2023/09/25/%E5%88%B7%E9%A2%981/</id>
     <published>2023-09-25T14:43:14.000Z</published>
     <updated>2023-09-29T08:12:35.079Z</updated>
     
@@ -288,8 +288,8 @@
   
   <entry>
     <title>前端安全5-CSP（笔记）</title>
-    <link href="http://example.com/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A85-CSP%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-09-24T03:04:11.000Z</published>
     <updated>2023-10-01T17:14:16.211Z</updated>
     
@@ -302,19 +302,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>前端安全4-Sanitization（笔记）</title>
-    <link href="http://example.com/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A84-Sanitization%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A84-Sanitization%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A84-Sanitization%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/09/24/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A84-Sanitization%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-09-23T16:14:43.000Z</published>
     <updated>2023-09-24T03:00:23.948Z</updated>
     
@@ -327,19 +327,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>前端安全3-js伪协议（笔记）</title>
-    <link href="http://example.com/2023/09/23/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A83-js%E4%BC%AA%E5%8D%8F%E8%AE%AE%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/09/23/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A83-js%E4%BC%AA%E5%8D%8F%E8%AE%AE%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/09/23/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A83-js%E4%BC%AA%E5%8D%8F%E8%AE%AE%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/09/23/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A83-js%E4%BC%AA%E5%8D%8F%E8%AE%AE%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-09-23T10:51:56.000Z</published>
     <updated>2023-09-23T16:24:12.474Z</updated>
     
@@ -352,19 +352,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>前端安全2-基础xss（笔记）</title>
-    <link href="http://example.com/2023/09/20/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A82-%E5%9F%BA%E7%A1%80xss%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/09/20/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A82-%E5%9F%BA%E7%A1%80xss%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/09/20/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A82-%E5%9F%BA%E7%A1%80xss%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/09/20/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A82-%E5%9F%BA%E7%A1%80xss%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-09-20T09:18:25.000Z</published>
     <updated>2023-09-23T16:23:56.392Z</updated>
     
@@ -377,19 +377,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>IELTS learning by chatgpt</title>
-    <link href="http://example.com/2023/09/17/IELTS-learning-by-chatgpt/"/>
-    <id>http://example.com/2023/09/17/IELTS-learning-by-chatgpt/</id>
+    <link href="https://kaikaix.github.io/2023/09/17/IELTS-learning-by-chatgpt/"/>
+    <id>https://kaikaix.github.io/2023/09/17/IELTS-learning-by-chatgpt/</id>
     <published>2023-09-17T08:59:37.000Z</published>
     <updated>2023-09-17T08:59:37.285Z</updated>
     
@@ -401,8 +401,8 @@
   
   <entry>
     <title>JNDIExploit路径穿越漏洞</title>
-    <link href="http://example.com/2023/09/16/JNDIExploit%E8%B7%AF%E5%BE%84%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E/"/>
-    <id>http://example.com/2023/09/16/JNDIExploit%E8%B7%AF%E5%BE%84%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E/</id>
+    <link href="https://kaikaix.github.io/2023/09/16/JNDIExploit%E8%B7%AF%E5%BE%84%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E/"/>
+    <id>https://kaikaix.github.io/2023/09/16/JNDIExploit%E8%B7%AF%E5%BE%84%E7%A9%BF%E8%B6%8A%E6%BC%8F%E6%B4%9E/</id>
     <published>2023-09-16T07:34:23.000Z</published>
     <updated>2023-09-16T08:10:39.221Z</updated>
     
@@ -413,17 +413,17 @@
     
     
     
-    <category term="java" scheme="http://example.com/categories/java/"/>
+    <category term="java" scheme="https://kaikaix.github.io/categories/java/"/>
     
     
-    <category term="java" scheme="http://example.com/tags/java/"/>
+    <category term="java" scheme="https://kaikaix.github.io/tags/java/"/>
     
   </entry>
   
   <entry>
     <title>前端安全1-浏览器安全模型（笔记）</title>
-    <link href="http://example.com/2023/09/12/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A81-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
-    <id>http://example.com/2023/09/12/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A81-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
+    <link href="https://kaikaix.github.io/2023/09/12/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A81-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/"/>
+    <id>https://kaikaix.github.io/2023/09/12/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A81-%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B%EF%BC%88%E7%AC%94%E8%AE%B0%EF%BC%89/</id>
     <published>2023-09-12T02:02:09.000Z</published>
     <updated>2023-09-23T16:24:08.467Z</updated>
     
@@ -439,19 +439,19 @@
     
     
     
-    <category term="前端安全" scheme="http://example.com/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
+    <category term="前端安全" scheme="https://kaikaix.github.io/categories/%E5%89%8D%E7%AB%AF%E5%AE%89%E5%85%A8/"/>
     
     
-    <category term="javascript" scheme="http://example.com/tags/javascript/"/>
+    <category term="javascript" scheme="https://kaikaix.github.io/tags/javascript/"/>
     
-    <category term="xss" scheme="http://example.com/tags/xss/"/>
+    <category term="xss" scheme="https://kaikaix.github.io/tags/xss/"/>
     
   </entry>
   
   <entry>
     <title>python的trick</title>
-    <link href="http://example.com/2023/09/11/python%E7%9A%84trick/"/>
-    <id>http://example.com/2023/09/11/python%E7%9A%84trick/</id>
+    <link href="https://kaikaix.github.io/2023/09/11/python%E7%9A%84trick/"/>
+    <id>https://kaikaix.github.io/2023/09/11/python%E7%9A%84trick/</id>
     <published>2023-09-11T14:18:20.000Z</published>
     <updated>2023-10-26T18:18:47.513Z</updated>
     
@@ -462,16 +462,16 @@
     
     
     
-    <category term="python" scheme="http://example.com/categories/python/"/>
+    <category term="python" scheme="https://kaikaix.github.io/categories/python/"/>
     
     
-    <category term="python" scheme="http://example.com/tags/python/"/>
+    <category term="python" scheme="https://kaikaix.github.io/tags/python/"/>
     
-    <category term="django" scheme="http://example.com/tags/django/"/>
+    <category term="django" scheme="https://kaikaix.github.io/tags/django/"/>
     
-    <category term="ctf" scheme="http://example.com/tags/ctf/"/>
+    <category term="ctf" scheme="https://kaikaix.github.io/tags/ctf/"/>
     
-    <category term="flask" scheme="http://example.com/tags/flask/"/>
+    <category term="flask" scheme="https://kaikaix.github.io/tags/flask/"/>
     
   </entry>
   
